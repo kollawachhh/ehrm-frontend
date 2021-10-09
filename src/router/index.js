@@ -1,23 +1,45 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Home from '../views/user/Home.vue'
+import TaskForm from '../views/user/TaskForm.vue'
+import BreakForm from '../views/user/BreakForm.vue'
+import TaskList from '../views/user/TaskList.vue'
+import BreakList from '../views/user/BreakList.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Login',
+    component: Login
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/home',
+    name: 'Home',
+    component: Home,
+  },
+  {
+    path: '/task',
+    name: 'TaskList',
+    component: TaskList,
+  },
+  {
+    path: '/taskForm',
+    name: 'TaskForm',
+    component: TaskForm,
+  },
+  {
+    path: '/break',
+    name: 'BreakList',
+    component: BreakList,
+  },
+  {
+    path: '/breakForm',
+    name: 'BreakForm',
+    component: BreakForm,
+  },
 ]
 
 const router = new VueRouter({

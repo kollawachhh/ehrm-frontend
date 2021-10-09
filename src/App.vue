@@ -1,17 +1,14 @@
 <template>
-  <div id="app" class="container">
-    <!-- <Header></Header> -->
-    <Login></Login>
+  <div id="app" class="container h-screen">
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Login from './views/Login.vue'
-import Header from './components/Header.vue'
 
 export default {
   name: 'App',
-  components: { Login },
+  components: {},
 }
 </script>
 
