@@ -9,6 +9,7 @@ module.exports = {
     colors: {
       primary: '#0f4c81',
       secondary: '#94B4CF',
+      content: '#9FACB8',
     },
     extend: {
       colors: {
@@ -21,8 +22,8 @@ module.exports = {
       },
       fontFamily: {
         eng:['Ubuntu'],
-        thai:['Kanit'],
-      }
+        th:['Kanit'],
+      },
     },
     screens: {
       'sm': {'max':'640px'},
