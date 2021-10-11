@@ -54,7 +54,10 @@ export default {
             let res = await Axios.post(url, body)
             console.log(res)
             if (res.status === 200) {
-                // localStorage.setItem(auth_key, JSON.stringify(res.data))
+                let user = {
+                    user: res.data
+                }
+                localStorage.setItem(auth_key, JSON.stringify(user))
                 // this.jwt = res.data.jwt
                 // console.log(this.jwt)
                 return {

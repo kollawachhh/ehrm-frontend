@@ -10,9 +10,9 @@
                 <div class="flex">
                     <img src="icons/user_test_img.png" alt="" class="mt-5 mx-5 w-28 h-28 rounded-full bg-white">
                     <div class="py-11">
-                        <span class="font-th font-bold text-lg">ประยงค์ จานโอชะ</span>
+                        <span class="font-th font-bold text-lg">{{ this.user.name }}</span>
                         <br>
-                        <span class="font-eng text-sm">Margeting</span>
+                        <span class="font-eng text-sm">{{ this.user.position }}</span>
                     </div>
                 </div>
                 <hr class="flex w-80 mx-auto my-5 border-1 border-white">
@@ -62,6 +62,7 @@
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+import AuthUser from '@/store/AuthUser'
 export default {
     data() {
         return {
@@ -69,8 +70,23 @@ export default {
                 taskIn: "",
                 taskOut: "",
                 totalTime: "",
+            },
+            user: {
+                name: "",
+                position: "",
             }
         }
+    },
+    created() {
+        this.user.name = AuthUser.getters.user.name;
+        this.user.position = AuthUser.getters.user.position;
+    },
+    mounted(){
+        if (!this.isAuthen()) {
+            this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
+            this.$router.push("/")
+        }
+        setUser
     },
     methods:{
         async submit(){
@@ -82,7 +98,11 @@ export default {
                 taskOut: "",
                 totalTime: "",
             }
-        }
+        },
+        isAuthen() {
+            if(AuthUser.getters.user != null)
+            return AuthUser.getters.isAuthen
+        }        
     },
     name:'TaskForm',
     components:{
