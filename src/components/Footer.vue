@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap absolute bottom-0 w-full">
-    <div class="w-full">
+    <nav class="w-full">
       <ul class="flex mb-0 list-none flex-wrap flex-row rounded-t-xl bg-primary">
         <li class="last:mr-0 flex-auto text-center">
           <a href="/home" class="font-th text-xs font-bold border-2 border-primary px-8 py-2 rounded-tl-xl block leading-normal" v-bind:class="{'text-white bg-primary': tab !== 'home', 'text-white bg-secondary': tab === 'home'}">
@@ -37,7 +37,7 @@
           </a>
         </li>
       </ul>
-    </div>
+    </nav>
   </div>
 </template>
 

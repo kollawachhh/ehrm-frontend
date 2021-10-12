@@ -39,6 +39,11 @@ export default {
     Header,
     Footer
   },
+  data() {
+      return {
+        role: '',
+      }
+  },
   mounted(){
     if (!this.isAuthen()) {
       this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
@@ -47,8 +52,12 @@ export default {
   },
   methods:{
     isAuthen() {
-      if (AuthUser.getters.user != null)
-      return AuthUser.getters.isAuthen
+      if(AuthUser.getters.user != null){
+        if(AuthUser.getters.user.is_admin === 1){
+          this.role = 'Admin'
+        }
+        return AuthUser.getters.isAuthen
+      }
     }
   }
 }

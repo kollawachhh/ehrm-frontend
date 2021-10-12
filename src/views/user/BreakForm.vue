@@ -56,7 +56,8 @@ export default {
                 startDate: "",
                 endDate: "",
                 total: "",
-            }
+            },
+            role:'',
         }
     },
     mounted(){
@@ -79,8 +80,12 @@ export default {
             }
         },
         isAuthen() {
-            if (AuthUser.getters.user != null)
-            return AuthUser.getters.isAuthen
+            if(AuthUser.getters.user != null){
+                if(AuthUser.getters.user.is_admin === 1){
+                    this.role = 'Admin'
+                }
+                return AuthUser.getters.isAuthen
+            }
         }
     },
     name:'BreakForm',
