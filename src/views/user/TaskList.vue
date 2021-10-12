@@ -7,11 +7,11 @@
                     <span class="font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6">
-                    <div v-if="role === 'Admin'" class="flex h-7 ml-2 mt-5">
+                    <div v-if="role === 'Admin'" class="flex h-7 mx-4 mt-5">
                         <input type="text" placeholder="ค้นหาผู้ใช้" class="flex font-th text-primary w-56 px-3 mr-3 rounded-md">
                         <button type="submit" class="font-th text-white px-6 bg-primary rounded-md">ค้นหา</button>
                     </div>
-                    <table class="mx-2 h-full" v-bind:class="{'mt-5':role === 'Admin','mt-1':role !== 'Admin'}">
+                    <table class="mx-auto h-full" v-bind:class="{'mt-5':role === 'Admin','mt-1':role !== 'Admin'}">
                         <thead class="flex border-b-4 border-primary">
                             <tr class="font-th w-80 text-md">
                                 <th class="w-20 border-l-2 border-primary"><span class="mx-auto">วันที่</span></th>
@@ -21,9 +21,9 @@
                             </tr>
                         </thead>
                         <div class="flex w-80 overflow-y-scroll" v-bind:class="{'h5/6':role === 'Admin', 'h-full' :role !== 'Admin'}">
-                            <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}"
-                                v-for="(log, index) in logList" :key="index">
-                                <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
+                            <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}">
+                                <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm"
+                                    v-for="(log, index) in logList" :key="index">
                                     <td class="text-center w-1/4">{{ log.date }}</td>
                                     <td class="text-center w-1/4">{{ log.login_time }}</td>
                                     <td class="text-center w-1/4">{{ log.logout_time }}</td>
@@ -58,6 +58,7 @@ export default {
                 year: "",
             },
             logList: [],
+            role: '',
         }
     },
     mounted(){
@@ -74,8 +75,13 @@ export default {
     },
     methods:{
         isAuthen() {
-            if(AuthUser.getters.user != null)
+            if(AuthUser.getters.user != null){
+                if(AuthUser.getters.user.is_admin === 1){
+                    this.role = 'Admin'
+                }
             return AuthUser.getters.isAuthen
+            }
+            
         },
         async fetchLogs() {
             await LogStore.dispatch('fetchLogs')

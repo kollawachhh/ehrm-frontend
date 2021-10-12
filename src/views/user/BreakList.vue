@@ -91,6 +91,7 @@ export default {
                 year: "",
             },
             leaveList: [],
+            role:'',
         }
     },
     mounted(){
@@ -101,8 +102,12 @@ export default {
     },
     methods:{
         isAuthen() {
-            if(AuthUser.getters.user != null)
-            return AuthUser.getters.isAuthen
+            if(AuthUser.getters.user != null){
+                if(AuthUser.getters.user.is_admin === 1){
+                    this.role = 'Admin'
+                }
+                return AuthUser.getters.isAuthen
+            }
         },
         async fetchLeaves() {
             await LeaveStore.dispatch('fetchLeaves')
