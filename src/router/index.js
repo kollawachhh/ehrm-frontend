@@ -6,6 +6,8 @@ import TaskForm from '../views/user/TaskForm.vue'
 import BreakForm from '../views/user/BreakForm.vue'
 import TaskList from '../views/user/TaskList.vue'
 import BreakList from '../views/user/BreakList.vue'
+import UserList from '../views/admin/UserList.vue'
+import UserForm from '../views/admin/UserForm.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +42,16 @@ const routes = [
     name: 'BreakForm',
     component: BreakForm,
   },
+  {
+    path: '/userList',
+    name: 'UserList',
+    component: UserList,
+  },
+  {
+    path: '/userForm',
+    name: 'UserForm',
+    component: UserForm,
+  }
 ]
 
 const router = new VueRouter({
