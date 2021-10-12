@@ -1,8 +1,8 @@
 <template>
   <div class="container h-screen bg-content">
     <Header></Header>
-    <div class="flex flex-wrap w-screen">
-        <div class="mx-auto mt-8">
+    <div class="flex mt-6 w-screen h-4/5">
+        <div class="mx-auto h-5/6">
             <div class="bg-primary px-28 py-5 rounded-t-md">
                 <span class="font-th text-white text-xl">ลงบันทึกเวลางาน</span>
             </div>
@@ -48,11 +48,10 @@
                             ชม.
                         </span>
                     </div>
-                    <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-28">ยืนยัน</button>
+                    <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-24">ยืนยัน</button>
                 </form>
             </div>
         </div>
-        
     </div>
     <Footer></Footer>
   </div>
