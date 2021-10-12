@@ -2,9 +2,9 @@
     <div class="container h-screen bg-content">
         <Header></Header>
         <div class="flex flex-wrap mt-6 w-screen h-3/4">
-            <div class="mx-auto  h-full bg-gray-300 rounded-md">
-                <div class="flex bg-primary mt-auto py-5 rounded-t-md">
-                    <span class="font-th text-white text-xl mx-auto">ตุลาคม - 2021</span>
+            <div class="mx-auto h-full bg-gray-300 rounded-md">
+                <div class="flex bg-primary px-28 py-5 rounded-t-md">
+                    <span class="font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6">
                     <div v-if="role === 'Admin'" class="flex h-7 ml-2 mt-5">
@@ -21,118 +21,13 @@
                             </tr>
                         </thead>
                         <div class="flex w-80 overflow-y-scroll" v-bind:class="{'h5/6':role === 'Admin', 'h-full' :role !== 'Admin'}">
-                            <tbody class="w-80 " v-bind:class="{'h-5/6':role === 'Admin'}">
+                            <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}"
+                                v-for="(log, index) in logList" :key="index">
                                 <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr>
-                                <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
-                                </tr><tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm">
-                                    <td class="text-center w-1/4">01/09/2564</td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4"> - </td>
-                                    <td class="text-center w-1/4">00 : 00<span class="font-th"> ชม.</span></td>
+                                    <td class="text-center w-1/4">{{ log.date }}</td>
+                                    <td class="text-center w-1/4">{{ log.login_time }}</td>
+                                    <td class="text-center w-1/4">{{ log.logout_time }}</td>
+                                    <td class="text-center w-1/4">{{ log.total_hours }}<span class="font-th"> ชม.</span></td>
                                 </tr>
                             </tbody>
                         </div>
@@ -147,12 +42,45 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import AuthUser from '@/store/AuthUser'
+import LogStore from '@/store/Log'
 export default {
 
     name:'TaskList',
     components: {
         Header,
         Footer
+    },
+    data() {
+        return {
+            date: {
+                month: "",
+                year: "",
+            },
+            logList: [],
+        }
+    },
+    mounted(){
+        if (!this.isAuthen()) {
+            this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
+            this.$router.push("/")
+        }
+    },
+    created() {
+        let today = new Date();
+        this.date.month = today.toLocaleString('default', { month: 'long' })
+        this.date.year = today.getFullYear()
+        this.fetchLogs()
+    },
+    methods:{
+        isAuthen() {
+            if(AuthUser.getters.user != null)
+            return AuthUser.getters.isAuthen
+        },
+        async fetchLogs() {
+            await LogStore.dispatch('fetchLogs')
+            this.logList = LogStore.getters.logs
+        }
     }
 }
 </script>

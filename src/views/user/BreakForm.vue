@@ -46,6 +46,7 @@
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import Dropdown from 'vue-simple-search-dropdown';
+import AuthUser from '@/store/AuthUser'
 export default {
     data() {
         return {
@@ -56,6 +57,12 @@ export default {
                 endDate: "",
                 total: "",
             }
+        }
+    },
+    mounted(){
+        if (!this.isAuthen()) {
+            this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
+            this.$router.push("/")
         }
     },
     methods:{
@@ -70,6 +77,10 @@ export default {
                 endDate: "",
                 total: "",
             }
+        },
+        isAuthen() {
+            if (AuthUser.getters.user != null)
+            return AuthUser.getters.isAuthen
         }
     },
     name:'BreakForm',

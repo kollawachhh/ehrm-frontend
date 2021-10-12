@@ -28,6 +28,7 @@
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import AuthUser from "@/store/AuthUser"
 
 export default {
   props: [
@@ -37,6 +38,18 @@ export default {
   components: {
     Header,
     Footer
+  },
+  mounted(){
+    if (!this.isAuthen()) {
+      this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
+      this.$router.push("/")
+    }
+  },
+  methods:{
+    isAuthen() {
+      if (AuthUser.getters.user != null)
+      return AuthUser.getters.isAuthen
+    }
   }
 }
 </script>

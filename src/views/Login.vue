@@ -22,7 +22,7 @@
               <p class="font-th text-black text-1xl w-4/5 m-auto pt-3 pb-1">รหัสผ่าน</p>
               <input class="flex items-center w-4/5 h-10 m-auto rounded-md px-3" 
                 type="password"
-                v-model="form.username"
+                v-model="form.password"
                 placeholder="กรอกชื่อรหัสผ่าน"
               >
             </div>
@@ -37,6 +37,8 @@
 
 <script>
 import Header from '../components/Header.vue'
+import AuthUser from '../store/AuthUser'
+
 export default {
   data() {
         return {
@@ -49,16 +51,24 @@ export default {
   components: { Header },
   methods: {
         async login() {
-            // console.log(this.form);
-            // let res = await AuthUser.dispatch('login', this.form)
-            // if (res.success) {
-                // this.$swal("ลงชื่อเข้าใช้สำเร็จ", `Welcome, ${res.user.username}`, "success")
+            console.log(this.form);
+            if (this.form.username == null || this.form.password == null || this.form.username == "" || this.form.password == "") {
+              this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+            }
+            else {
+              let res = await AuthUser.dispatch('login', this.form)
+              console.log(res);
+              if (res.success) {
+                this.$swal("ลงชื่อเข้าใช้สำเร็จ", `Welcome, ${res.user.username}`, "success")
                 this.$router.push('/home')
-            // }
-            // else {
-                // this.$swal("ชื่อผู้ใช้หรือรหัสผ่านผิด", res.message, "error")
-                // this.clearForm()
-            // }
+              }
+              else {
+                this.$swal("ชื่อผู้ใช้หรือรหัสผ่านผิด", res.message, "error")
+                this.clearForm()
+              }
+            }
+            
+            
         },
         clearForm() {
             this.form = {
