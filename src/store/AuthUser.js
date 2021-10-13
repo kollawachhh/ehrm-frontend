@@ -35,6 +35,7 @@ export default new Vuex.Store({
       console.log(res)
       if (res.success) {
         commit("loginSuccess", res)
+        return res
       } else {
         return "failed"
       }
