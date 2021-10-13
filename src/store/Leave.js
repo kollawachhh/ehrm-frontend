@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import LeaveService from '@/services/LeaveService'
+import AuthUser from '@/store/AuthUser'
 
 Vue.use(Vuex)
 
@@ -27,8 +28,8 @@ export default new Vuex.Store({
 
     actions: {
         async fetchLeaves({ commit }) {
-            let payload = await LeaveService.getLeaves();
-            commit("fetch", payload)
+            let payload = await LeaveService.getLeaves(AuthUser.getters.user.id);
+            commit("fetch", payload.data)
         },
         async leaves({ commit }, { startDate, endDate, type, total, reason, id }) {
             let res = await LeaveService.addLeaves({ startDate, endDate, type, total, reason, id })

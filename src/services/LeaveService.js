@@ -6,6 +6,28 @@ const user = auth ? auth.user : ""
 const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000"
 
 export default {
+    async getLeaves(id) {
+        try{
+            let res = await Axios.get(`${api_endpoint}/api/leaves/${id}`)
+            console.log(res)
+            return res
+        }catch (e){
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+            
     getUser() {
         return user
     },
@@ -49,7 +71,7 @@ export default {
             }
         }
     },
-    async getLeaves() {
+    async getAllLeaves() {
         try {
             let res = await Axios.get(`${api_endpoint}/api/leaves`)
             return res.data

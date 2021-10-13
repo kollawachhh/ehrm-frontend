@@ -65,7 +65,7 @@ export default {
                 this.$router.push('/home')
               }
               else {
-                this.$swal("ชื่อผู้ใช้หรือรหัสผ่านผิด", "กรุณาลองอีกครั้ง", "error")
+                this.$swal("ชื่อผู้ใช้หรือรหัสผ่านผิด", "โปรดตรวจสอบชื่อผู้ใช้ หรือรหัสผ่านอีกครั้ง", "error")
                 this.clearForm()
               }
             }
