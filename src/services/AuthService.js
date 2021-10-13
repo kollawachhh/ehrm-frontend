@@ -53,7 +53,7 @@ export default {
             }
             let res = await Axios.post(url, body)
             console.log(res)
-            if (res.status === 200) {
+            if (res.status === 200 && res.data !== 'out') {
                 let user = {
                     user: res.data
                 }

@@ -1,0 +1,60 @@
+<template>
+    <div class="container h-screen bg-content">
+        <Header></Header>
+        <div class="flex flex-wrap w-screen h-3/4">
+            <div class="mx-auto mt-8 h-full w-10/12 bg-gray-300 rounded-md">
+                <div class="flex bg-primary py-5 rounded-t-md">
+                    <span class="font-th mx-auto text-white text-xl">ข้อมูลผู้ใช้</span>
+                </div>
+                <div class="bg-gray-300 w-full rounded-b-md h-5/6 ">
+                    <div class="my-5">
+                        <img src="icons/user_test_img.png" alt="" class="w-40 h-40 rounded-full mx-auto  bg-white">
+                    </div>
+                    <hr class="flex w-80 mx-auto  border-1 border-white">
+                    <div class="font-th text-primary leading-9 my-5">
+                        <p class="mx-10">ชื่อ : {{this.user.name}} </p>
+                        <p class="mx-10">ตำแหน่ง : {{this.user.position}} </p>
+                        <p class="mx-10">แผนก : {{this.user.department}} </p>
+                    </div>
+                    <hr class="flex w-80 mx-auto mb-5 border-1 border-white">
+                    <div class="flex font-th text-white">
+                        <button @click="getTaskList" class="mx-auto p-2 bg-primary rounded-md">ดูประวัติลงงาน</button>
+                        <button @click="getBreakList" class="mx-auto p-2 bg-primary rounded-md">ดูประวัติลางาน</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <Footer tab='none'></Footer>
+    </div>
+</template>
+
+<script>
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+export default {
+    data() {
+        return {
+            user: {
+                name: '',
+                position: '',
+                department: '',
+            },
+        }
+    },
+    name:'UserList',
+    components: {
+        Header,
+        Footer
+    },
+    methods:{
+        async getTaskList(){
+            this.$router.push('/task')
+        },
+        async getBreakList(){
+            this.$router.push('/break')
+        },
+    },
+}
+</script>
+
+<style lang="scss" scoped></style>
