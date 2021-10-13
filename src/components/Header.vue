@@ -1,6 +1,6 @@
 <template>
     <nav class="wrapper">
-        <h1 class="flex font-eng font-bold text-white text-9xl h-1/4 ml-5 mr-auto mt-6 sm:text-3xl ">EHRM</h1>
+        <a href="/home" class="flex font-eng font-bold text-white text-9xl h-1/4 p-7 mr-auto sm:text-3xl ">EHRM</a>
         <button @click.prevent="logout" class="flex font-th text-white text-lg px-5">
             <p class="pr-3 pt-7">{{ this.user.name }}</p> 
             <img src="icons/user_test_img.png" alt="" class="rounded-full bg-white h-16 w-16 ml-auto  my-3">

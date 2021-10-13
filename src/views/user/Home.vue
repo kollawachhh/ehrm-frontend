@@ -32,7 +32,6 @@ import AuthUser from "@/store/AuthUser"
 
 export default {
   props: [
-    'role'
   ],
   name:'Home',
   components: {

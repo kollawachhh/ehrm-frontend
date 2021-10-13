@@ -8,6 +8,7 @@ import TaskList from '../views/user/TaskList.vue'
 import BreakList from '../views/user/BreakList.vue'
 import UserList from '../views/admin/UserList.vue'
 import UserForm from '../views/admin/UserForm.vue'
+import UserDetail from '../views/admin/UserDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ const routes = [
     path: '/userForm',
     name: 'UserForm',
     component: UserForm,
+  },
+  {
+    path: '/userDetail',
+    name: 'UserDetail',
+    component: UserDetail,
   }
 ]
 
