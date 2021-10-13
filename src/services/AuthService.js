@@ -53,7 +53,7 @@ export default {
             }
             let res = await Axios.post(url, body)
             console.log(res)
-            if (res.status === 200) {
+            if (res.status === 200 && res.data != "out") {
                 let user = {
                     user: res.data
                 }
@@ -64,6 +64,11 @@ export default {
                     success: true,
                     user: res.data,
                     // jwt: res.data.jwt
+                }
+            } else if (res.data == "out") {
+                return {
+                    sucess: false,
+                    user: "failed"
                 }
             } else {
                 console.log("NOT 200", res)
@@ -85,9 +90,9 @@ export default {
         }
     },
 
-    // logout() {
-    //     localStorage.removeItem(auth_key)
-    // },
+    logout() {
+        localStorage.removeItem(auth_key)
+    },
 
     // async register({ username, email, password }) {
     //     // call POST /auth/local/register

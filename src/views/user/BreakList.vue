@@ -7,12 +7,12 @@
                     <span class="font-th text-white text-xl">{{ this.date.month  }} - {{ this.date.year }}</span>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-full overflow-scroll">
-                    <div class="pt-2">
-                        <span class="flex font-th py-2 pl-4">ลาป่วย</span>
+                    <div class="pt-2" v-for="(leave, index) in this.leaveList" :key="index">
+                        <span class="flex font-th py-2 pl-4">{{ leave.type }}</span>
                         <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                            <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                            <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                            <span class="flex">วันที่ : 3 - 5 วัน</span>
+                            <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
+                            <span class="flex mb-3">ระยะเวลา : {{ leave.leave_date }} วัน</span>
+                            <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
                         </div>
                     </div>
                 </div>
@@ -57,6 +57,19 @@ export default {
         async fetchLeaves() {
             await LeaveStore.dispatch('fetchLeaves')
             this.leaveList = LeaveStore.getters.leaves
+            this.leaveList.forEach(function(leave) {
+            if (leave.type == "sick_leave") {
+                leave.type = "ลาป่วย";
+            } else if (leave.type == "personal_leave") {
+                leave.type = "ลากิจ"
+            } else if (leave.type == "vacation_leave") {
+                leave.type = "ลาพักร้อน"
+            } else if (leave.type == "maternity_leave") {
+                leave.type = "ลาคลอด"
+            }
+            })
+
+            console.log(this.leaveList)
         }        
     },
     created() {

@@ -86,7 +86,6 @@ export default {
             this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
             this.$router.push("/")
         }
-        setUser
     },
     methods:{
         async submit(){
