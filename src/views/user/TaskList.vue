@@ -1,14 +1,18 @@
 <template>
     <div class="container h-screen bg-content">
         <Header></Header>
-        <div class="flex flex-wrap w-screen h-3/4">
-            <div class="mx-auto mt-8 h-full bg-gray-300 rounded-md">
-                <div class="flex bg-primary px-28 py-5 rounded-t-md">
-                    <span class="font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+        <div class="flex flex-wrap mt-6 w-screen h-3/4">
+            <div class="mx-auto h-full bg-gray-300 rounded-md ">
+                <div class="flex bg-primary py-5 rounded-t-md ">
+                    <a href="/home" class="font-th ml-5 text-xl px-2 text-white">&#60;</a>
+                    <span class="flex font-th text-white text-xl ml-5">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <select v-model="date.month" name="months" id="months" class="flex ml-5 w-5 bg-primary text-white">
+                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
+                    </select>
                 </div>
-                <div class="flex bg-gray-300 rounded-b-md mt-5 h-5/6 overflow-y-scroll">
-                    <table class="mx-2">
-                        <thead>
+                <div class="bg-gray-300 rounded-b-md h-5/6 px-2">
+                    <table class="mx-auto h-full mt-1 ">
+                        <thead class="flex border-b-4 border-primary">
                             <tr class="font-th w-80 text-md">
                                 <th class="w-20 border-l-2 border-primary"><span class="mx-auto">วันที่</span></th>
                                 <th class="w-20 border-l-2 border-primary"><span class="mx-auto">เวลาเข้า</span></th>
@@ -16,15 +20,17 @@
                                 <th class="w-20 border-l-2 border-r-2 border-primary"><span class="mx-auto">เวลารวม</span></th>
                             </tr>
                         </thead>
-                        <tbody class="border-t-4 border-primary">
-                            <tr class="font-eng border-t-2 border-primary text-sm h-24"
-                                v-for="(log, index) in logList" :key="index">
-                                <td class="text-center">{{ log.date }}</td>
-                                <td class="text-center">{{ log.login_time }}</td>
-                                <td class="text-center">{{ log.logout_time }}</td>
-                                <td class="text-center">{{ log.total_hours }}<span class="font-th"> ชม.</span></td>
-                            </tr>
-                        </tbody>
+                        <div class="flex h-full w-80 overflow-y-scroll">
+                            <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}">
+                                <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm"
+                                    v-for="(log, index) in logList" :key="index">
+                                    <td class="text-center w-1/4">{{ log.date }}</td>
+                                    <td class="text-center w-1/4">{{ log.login_time }}</td>
+                                    <td class="text-center w-1/4">{{ log.logout_time }}</td>
+                                    <td class="text-center w-1/4">{{ log.total_hours }}<span class="font-th"> ชม.</span></td>
+                                </tr>
+                            </tbody>
+                        </div>
                     </table>
                 </div>
             </div>
@@ -39,6 +45,7 @@ import Footer from '@/components/Footer.vue'
 import AuthUser from '@/store/AuthUser'
 import LogStore from '@/store/Log'
 export default {
+
     name:'TaskList',
     components: {
         Header,
@@ -51,6 +58,21 @@ export default {
                 year: "",
             },
             logList: [],
+            role: '',
+            months:[
+                { id: '1', name: 'January' },
+                { id: '2', name: 'Febuary' },
+                { id: '3', name: 'March' },
+                { id: '4', name: 'April' },
+                { id: '5', name: 'May' },
+                { id: '6', name: 'June' },
+                { id: '7', name: 'July' },
+                { id: '8', name: 'August' },
+                { id: '9', name: 'September' },
+                { id: '10', name: 'October' },
+                { id: '11', name: 'November' },
+                { id: '12', name: 'December' },
+            ],
         }
     },
     mounted(){
@@ -67,12 +89,18 @@ export default {
     },
     methods:{
         isAuthen() {
-            if(AuthUser.getters.user != null)
+            if(AuthUser.getters.user != null){
+                if(AuthUser.getters.user.is_admin === 1){
+                    this.role = 'Admin'
+                }
             return AuthUser.getters.isAuthen
+            }
+            
         },
         async fetchLogs() {
             await LogStore.dispatch('fetchLogs')
             this.logList = LogStore.getters.logs
+            console.log(LogStore.getters.logs)
         }
     }
 }
