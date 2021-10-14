@@ -7,11 +7,11 @@ const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000
 
 export default {
     async getLeaves(id) {
-        try{
+        try {
             let res = await Axios.get(`${api_endpoint}/api/leaves/${id}`)
             console.log(res)
             return res
-        }catch (e){
+        } catch (e) {
             if (e.response.status === 400) {
                 console.error(e.response.data.message[0].messages[0].message)
                 return {
@@ -27,18 +27,19 @@ export default {
             }
         }
     },
-            
+
     getUser() {
         return user
     },
-    async addLeaves({ startDate, endDate, type, total, reason, id }) {
+    async addLeaves({ startDate, endDate, type, totalDate, reason, id }) {
+        console.log("worked")
         try {
             let url = `${api_endpoint}/api/user/create-leave`
             let body = {
                 date_start: startDate,
                 date_end: endDate,
                 type: type,
-                leave_dates: total,
+                leave_dates: totalDate,
                 cause: reason,
                 user_id: id
             }
