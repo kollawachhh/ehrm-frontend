@@ -4,7 +4,8 @@
         <div class="flex flex-wrap w-screen h-3/4">
             <div class="mx-auto mt-8 h-full w-10/12 bg-gray-300 rounded-md">
                 <div class="flex bg-primary py-5 rounded-t-md">
-                    <span class="font-th mx-auto text-white text-xl">ข้อมูลผู้ใช้</span>
+                    <button @click="backPage" class="font-th ml-5 text-xl px-2 mr-16 text-white">&#60;</button>
+                    <span class="font-th text-white ml-6 text-xl">ข้อมูลผู้ใช้</span>
                 </div>
                 <div class="bg-gray-300 w-full rounded-b-md h-5/6 ">
                     <div class="my-5">
@@ -53,6 +54,9 @@ export default {
         async getBreakList(){
             this.$router.push('/break')
         },
+        async backPage(){
+            this.$router.go(-1)
+        }
     },
 }
 </script>

@@ -27,8 +27,8 @@ export default {
     methods:{
         async logout() {
             this.$fire({
-                title: 'กำลังจะลงชื่อออก',
-                text: "คุณต้องการลงชื่อออกใช่หรือไม่?",
+                title: 'กำลังจะออกจากระบบ',
+                text: "คุณต้องการออกจากระบบใช่หรือไม่?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -36,7 +36,12 @@ export default {
                 confirmButtonText: 'ใช่',
                 cancelButtonText: 'ไม่',
             }).then((r) => {
-                //logout
+                console.log(r)
+                if(r.value){
+                    AuthUser.dispatch('logout')
+                    this.$swal("ออกจากระบบแล้ว!", `คุณได้ทำการออกจากระบบ`, "success")
+                    this.$router.push('/')
+                }
             });
         }
     },
@@ -44,12 +49,6 @@ export default {
         this.user.name = AuthUser.getters.user.name;
         this.user.position = AuthUser.getters.user.position;
     },
-    methods: {
-        // logout() {
-        //     AuthUser.dispatch('logout')
-        //     this.$router.push('/')
-        // }
-    }
 }
 </script>
 

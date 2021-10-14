@@ -4,7 +4,7 @@
         <div class="flex flex-wrap w-screen h-3/4">
             <div class="mx-auto mt-8 h-full bg-gray-300 rounded-md">
                 <div class="flex bg-primary py-5 rounded-t-md">
-                    <a href="/home" class="font-th ml-5 text-xl px-2 mr-16 text-white">&#60;</a>
+                    <button @click="backPage" class="font-th ml-5 text-xl px-2 mr-16 text-white">&#60;</button>
                     <span class="font-th text-white ml-3 text-xl">รายการผู้ใช้</span>
                 </div>
                 <div class=" bg-gray-300 rounded-b-md h-5/6 ">
@@ -54,6 +54,9 @@ export default {
     methods:{
         async getDetail(){
             this.$router.push('/userDetail')
+        },
+        async backPage(){
+            this.$router.go(-1)
         },
     },
 }
