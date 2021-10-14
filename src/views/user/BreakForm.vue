@@ -2,24 +2,22 @@
   <div class="container h-screen bg-content">
     <Header></Header>
     <div class="flex flex-wrap w-screen">
-        <div class="mx-auto mt-8">
-            <div class="bg-primary px-28 py-5 rounded-t-md">
-                <span class="font-th text-white text-xl">ลงบันทึกลางาน</span>
+        <div class="mx-auto mt-8 w-10/12">
+            <div class="bg-primary py-5 rounded-t-md">
+                <button @click="backPage" class="font-th ml-5 mr-10 text-xl px-2 text-white">&#60;</button>
+                <span class="font-th ml-5 text-white text-xl">ลงบันทึกลางาน</span>
             </div>
             <div class="bg-gray-300 rounded-b-md pb-4">
                 <form @submit.prevent="submit">
                     <div class="pl-6 pt-5">
                         <span class="flex font-th pb-2">ประเภทการลางาน</span>
-                        <Dropdown
-                            :options="[{ id: 1, name: 'Option 1'}, { id: 2, name: 'Option 2'}]"
-                            v-on:selected="validateSelection"
-                            v-on:filter="getDropdownValues"
-                            :disabled="false"
-                            name="zipcode"
-                            :maxItem="10"
-                            placeholder="เลือกประเภทการลา"
-                            class="font-th ">
-                        </Dropdown>
+                        <select v-model="form.type" name="type" id="types" class="flex mr-5 p-1 w-11/12 bg-white">
+                            <option value="" disabled selected hidden>เลือกประเภท</option>
+                            <option 
+                                v-for="(type, index) in types" :key="index" :value='type.name' >
+                            {{ type.name }}
+                            </option>
+                        </select>
                     </div>
                     <div class="pl-6 pt-5">
                         <span class="flex font-th pb-2">เหตุผลการลางาน</span>
@@ -29,10 +27,10 @@
                         <span class="flex font-th pb-2">ตั้งแต่วันที่</span>
                         <input v-model="form.startDate" type="date" placeholder='วันที่ลางาน' class="flex font-eng bg-white w-11/12 mb-2 p-1">
                         <span class="flex font-th pb-2">ถึง</span>
-                        <input v-model="form.endDate" type="date" placeholder='วันที่ลางาน' class="flex font-eng bg-white w-11/12 mb-2 p-1">
-                        <span class="font-th">เป็นเวลา 0 วัน</span>
+                        <input @change="getTotalDate" v-model="form.endDate" type="date" placeholder='วันที่ลางาน' class="flex font-eng bg-white w-11/12 mb-2 p-1">
+                        <span class="font-th">เป็นเวลา {{form.totalDate}} วัน</span>
                     </div>
-                    <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-28">ยืนยัน</button>
+                    <button  type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-28">ยืนยัน</button>
                 </form>
             </div>
         </div>
@@ -45,9 +43,9 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import Dropdown from 'vue-simple-search-dropdown';
 import AuthUser from '@/store/AuthUser'
 import Leave from '@/store/Leave'
+import moment from 'moment'
 
 export default {
     data() {
@@ -57,10 +55,20 @@ export default {
                 reason: "",
                 startDate: "",
                 endDate: "",
-                total: "",
+                totalDate: 0,
                 id: "",
             },
             role:'',
+            types:[
+                {
+                    id: 1,
+                    name: "ลาป่วย",
+                },
+                {
+                    id: 2,
+                    name: "ลาหยุด",
+                },
+            ],
         }
     },
     mounted(){
@@ -111,13 +119,18 @@ export default {
                 }
                 return AuthUser.getters.isAuthen
             }
+        },
+        async backPage(){
+            this.$router.go(-1)
+        },
+        getTotalDate(){
+            this.form.totalDate = moment(this.form.endDate).diff(moment(this.form.startDate), 'days')
         }
     },
     name:'BreakForm',
     components:{
         Header,
         Footer,
-        Dropdown,
     }
 }
 </script>

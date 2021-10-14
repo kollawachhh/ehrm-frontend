@@ -61,7 +61,7 @@ export default {
               let res = await AuthUser.dispatch('login', this.form)
               console.log(res);
               if (res.success) {
-                this.$swal("ลงชื่อเข้าใช้สำเร็จ", `ยินดีต้อนรับ คุณ ${res.user.name}`)
+                this.$swal("ลงชื่อเข้าใช้สำเร็จ", `ยินดีต้อนรับ คุณ ${res.user.name}`, "success")
                 this.$router.push('/home')
               }
               else {
