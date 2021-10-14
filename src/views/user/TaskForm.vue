@@ -116,7 +116,6 @@ export default {
             this.form.taskOutNow = true
             this.form.taskOut = moment().format('HH:mm')
             this.form.totalTime = moment.utc(moment(this.form.taskOut, "HH:mm").diff(moment(this.form.taskIn, "HH:mm"))).format("HH:mm")
-            // console.log(this.form.taskIn - this.form.taskOut)
             console.log(moment.utc(moment(this.form.taskOut, "HH:mm").diff(moment(this.form.taskIn, "HH:mm"))).format("HH:mm"))
         },
         clearForm() {
