@@ -9,7 +9,7 @@ let auth = JSON.parse(localStorage.getItem(auth_key))
 
 const initialState = {
   user: auth ? auth.user : "",
-  // jwt: auth ? auth.jwt : "",
+  jwt: auth ? auth.jwt : "",
   isAuthen: auth ? true : false,
 }
 
@@ -19,12 +19,12 @@ export default new Vuex.Store({
   mutations: {
     loginSuccess(state, payload) {
       state.user = payload.user
-      // state.jwt = payload.jwt
+      state.jwt = payload.jwt
       state.isAuthen = true 
     },
     logoutSuccess(state) {
       state.user = ""
-      // state.jwt = ""
+      state.jwt = ""
       state.isAuthen = false
     },
   },
@@ -63,7 +63,7 @@ export default new Vuex.Store({
 
   getters: {
     user: (state) => state.user,
-    // jwt: (state) => state.jwt,
+    jwt: (state) => state.jwt,
     isAuthen: (state) => state.isAuthen,
   },
 

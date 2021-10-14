@@ -3,7 +3,7 @@ import Axios from "axios"
 const auth_key = "auth-ehrm"
 let auth = JSON.parse(localStorage.getItem(auth_key))
 const user = auth ? auth.user : ""
-// const jwt = auth ? auth.jwt : ""
+const jwt = auth ? auth.jwt : ""
 
 const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000"
 
@@ -12,22 +12,22 @@ export default {
     //     return (user !== "") && (jwt !== "")
     // },
 
-    // getApiHeader() {
-    //     if (this.jwt !== undefined && this.jwt !== "") {
-    //         return {
-    //             headers: {
-    //                 Authorization: `Bearer ${this.jwt}`
-    //             }
-    //         }
-    //     } else {
-    //         this.jwt = JSON.parse(localStorage.getItem(auth_key)).jwt
-    //         return {
-    //             headers: {
-    //                 Authorization: `Bearer ${this.jwt}`
-    //             }
-    //         }
-    //     }
-    // },
+    getApiHeader() {
+        if (this.jwt !== undefined && this.jwt !== "") {
+            return {
+                headers: {
+                    Authorization: `Bearer ${this.jwt}`
+                }
+            }
+        } else {
+            this.jwt = JSON.parse(localStorage.getItem(auth_key)).jwt
+            return {
+                headers: {
+                    Authorization: `Bearer ${this.jwt}`
+                }
+            }
+        }
+    },
 
     // isRoleAuthenticated() {
     //     return this.isAuthen() && user.role.name === "Authenticated"
@@ -38,40 +38,40 @@ export default {
         return user
     },
 
-    // getJwt() {
-    //     return jwt
-    // },
+    getJwt() {
+        return jwt
+    },
 
     async login({ password, username }) {
         // call POST /auth/local
         try {
             // let url = api_endpoint + "/auth/local"
-            let url = `${api_endpoint}/api/login`
+            let url = `${api_endpoint}/api/auth/login`
             let body = {
                 email: username,
                 password: password
             }
             let res = await Axios.post(url, body)
             console.log(res)
-            if (res.status === 200 && res.data !== 'out') {
+            if (res.status === 200) {
                 let user = {
-                    user: res.data
+                    jwt: res.data.access_token,
+                    user: res.data.user
                 }
                 localStorage.setItem(auth_key, JSON.stringify(user))
                 // this.jwt = res.data.jwt
                 // console.log(this.jwt)
                 return {
                     success: true,
-                    user: res.data,
-                    // jwt: res.data.jwt
+                    user: res.data.user,
+                    jwt: res.data.access_token
                 }
-            } else if (res.data == "out") {
+            } else {
+                console.log("NOT 200", res)
                 return {
                     sucess: false,
                     user: "failed"
                 }
-            } else {
-                console.log("NOT 200", res)
             }
         } catch (e) {
             if (e.response.status === 400) {

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import LogService from '@/services/LogService'
-import AuthUser from '@/store/AuthUser'
 
 Vue.use(Vuex)
 
@@ -16,14 +15,14 @@ export default new Vuex.Store({
 
     mutations: {
         fetch(state, payload) {
-            state.data = payload;
+            state.data = payload.data;
         }
     },
 
     actions: {
         async fetchLogs({ commit }) {
-            let payload = await LogService.getLogs(AuthUser.getters.user.id);
-            console.log(payload)
+            let payload = await LogService.getLogs();
+            console.log(payload.data)
             commit("fetch", payload.data)
         }
     },
