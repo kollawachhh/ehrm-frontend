@@ -35,9 +35,6 @@ import AuthUser from '@/store/AuthUser'
 import LeaveStore from '@/store/Leave'
 import Dropdown from 'vue-simple-search-dropdown';
 export default {
-    props:[
-        'role',
-    ],
     name:'BreakList',
     components: {
         Header,

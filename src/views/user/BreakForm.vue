@@ -25,9 +25,23 @@
                     </div>
                     <div class="pl-6 pt-5">
                         <span class="flex font-th pb-2">ตั้งแต่วันที่</span>
-                        <input v-model="form.startDate" type="date" placeholder='วันที่ลางาน' class="flex font-eng bg-white w-11/12 mb-2 p-1">
+                        <date-picker v-model="form.startDate" type="date" 
+                        :default-value="new Date()" :disabled-date="notBeforeToday" 
+                         placeholder='วันที่ลางาน' 
+                        :clearable=false 
+                        class="center font-eng bg-white w-11/12 mb-2 p-1"></date-picker>
                         <span class="flex font-th pb-2">ถึง</span>
-                        <input @change="getTotalDate" v-model="form.endDate" type="date" placeholder='วันที่ลางาน' class="flex font-eng bg-white w-11/12 mb-2 p-1">
+                        <date-picker v-if="this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
+                        :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
+                        value-type="format" placeholder='วันที่ลางาน' 
+                        :clearable=false disabled
+                        class="center font-eng bg-white w-11/12 mb-2 p-1"></date-picker>
+                        <date-picker v-if="!this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
+                        :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
+                        value-type="format" placeholder='วันที่ลางาน' 
+                        :clearable=false
+                        class="center font-eng bg-white w-11/12 mb-2 p-1"></date-picker>
+                        <br>
                         <span class="font-th">เป็นเวลา {{form.totalDate}} วัน</span>
                     </div>
                     <button  type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-28">ยืนยัน</button>
@@ -41,6 +55,8 @@
 </template>
 
 <script>
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import AuthUser from '@/store/AuthUser'
@@ -48,6 +64,7 @@ import Leave from '@/store/Leave'
 import moment from 'moment'
 
 export default {
+    components: { DatePicker },
     data() {
         return {
             form: {
@@ -58,16 +75,13 @@ export default {
                 totalDate: 0,
                 id: "",
             },
+            disableDatePicker: true,
             role:'',
             types:[
-                {
-                    id: 1,
-                    name: "ลาป่วย",
-                },
-                {
-                    id: 2,
-                    name: "ลาหยุด",
-                },
+                    {name: "ลาป่วย", id: "sick_leave"},
+                    {name: "ลากิจ", id: "personal_leave"},
+                    {name: "ลาพักร้อน", id: "vacation_leave"},
+                    {name: "ลาคลอด", id: "maternity_leave"}
             ],
         }
     },
@@ -78,29 +92,33 @@ export default {
         }
     },
     methods:{
-        leaveTotalDay(startDate, endDate) {
-            // var Difference_In_Time = date2.getTime() - date1.getTime();
-            // // To calculate the no. of days between two dates
-            // var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-            
-            // //To display the final no. of days (result)
-            // document.write("Total number of days between dates  <br>"
-            //    + date1 + "<br> and <br>" 
-            //    + date2 + " is: <br> " 
-            //    + Difference_In_Days);
+        notBeforeToday(date) {
+            this.disableDatePicker = false;
+            return date < new Date(new Date());
+        },
+        // notBeforeTodaySelect(date) {
+        //     console.log(this.form.startDate)
+        //     console.log(date)
+        //     return new Date(new Date()) < this.form.startDate;
+        // },
+        notBeforeTodaySelect(date) {
+            return date < this.form.startDate;
         },
         async submit(){
-            let payload = {
-                date_start: this.startDate,
-                date_end: this.endDate,
-                type: this.type,
-                leave_dates: this.total,
-                cause: this.reason,
-                user_id: this.id
+            if (this.form.type !== null && 
+            this.form.reason !== null &&
+            this.form.startDate !== null &&
+            this.form.endDate !== null &&
+            this.form.totalDate !== 0 &&
+            this.form.id !== null) {
+                this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
+                await Leave.dispatch("leaves", this.form);
+                this.clearForm();
+                this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
+                this.$router.push('/break')
+            } else {
+                this.$swal("ทำรายการไม่สำเร็จ", `กรุณากรอกข้อมูลให้ครบถ้วน`, "warning")
             }
-            Leave.dispatch("leaves", payload);
-            this.clearForm();
-            this.$router.push('/break')
         },
         clearForm() {
             this.form = {
@@ -116,6 +134,8 @@ export default {
             if(AuthUser.getters.user != null){
                 if(AuthUser.getters.user.is_admin === 1){
                     this.role = 'Admin'
+                } else {
+                    this.form.id = AuthUser.getters.user.id
                 }
                 return AuthUser.getters.isAuthen
             }
@@ -124,7 +144,8 @@ export default {
             this.$router.go(-1)
         },
         getTotalDate(){
-            this.form.totalDate = moment(this.form.endDate).diff(moment(this.form.startDate), 'days')
+            this.form.totalDate = moment(this.form.endDate).diff(moment(this.form.startDate), 'days')+1
+
         }
     },
     name:'BreakForm',
