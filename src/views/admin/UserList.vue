@@ -8,30 +8,31 @@
                     <span class="font-th text-white ml-3 text-xl">รายการผู้ใช้</span>
                 </div>
                 <div class=" bg-gray-300 rounded-b-md h-5/6 ">
-                    <div class="flex h-7 ml-2 my-5">
-                        <input type="text" placeholder="ค้นหาผู้ใช้" class="flex font-th w-40 px-3 mr-2 rounded-md">
-                        <button type="submit" class="font-th text-white px-5 bg-primary rounded-md">ค้นหา</button>
-                        <a href="/userForm" class="px-3 py-1 ml-1 font-th text-white bg-secondary rounded-md">เพิ่มผู้ใช้</a>
+                    <div class="flex w-11/12 h-7 mx-auto my-5">
+                        <select @change="fetchUser($event)" name="" id="" class="flex font-th w-3/4 bg-white px-3 mr-3 rounded-md">
+                            <option value="" disabled selected hidden>ค้นหาลูกค้าจากระบบ</option>
+                            <option v-for="(user, index) in searchList" :key="index" :value="user.id">{{user.id + " : " + user.name}}</option>
+                        </select>
+                        <a href="/userForm" class="px-3 w-1/4 py-1 font-th text-white bg-secondary rounded-md">เพิ่มผู้ใช้</a>
                     </div>
                     <table class="mx-2 h-full">
-                        <thead class="flex border-b-4 border-primary">
-                            <tr class="font-th w-80 text-md">
-                                <th class="w-20 border-l-2 border-primary"><span class="mx-auto">ไอดี</span></th>
-                                <th class="w-20 border-l-2 border-primary"><span class="mx-auto">ชื่อผู้ใช้</span></th>
-                                <th class="w-20 border-l-2 border-primary"><span class="mx-auto">ชื่อ</span></th>
-                                <th class="w-20 border-l-2 border-r-2 border-primary"><span class="mx-auto">เข้าใช้ล่าสุด</span></th>
+                        
+                        <thead class="w-full flex border-b-4 border-primary">
+                            <tr class="flex font-th w-80 text-md">
+                                <th class="w-1/6 border-l-2 border-primary"><span class="mx-auto">ไอดี</span></th>
+                                <th class="w-2/6 border-l-2 border-primary"><span class="mx-auto">ชื่อ</span></th>
+                                <th class="w-3/6 border-l-2 border-r-2 border-primary"><span class="mx-auto">เข้าใช้ล่าสุด</span></th>
                             </tr>
                         </thead>
                         <div class="flex w-80 h-full overflow-y-scroll">
                             <tbody class="w-80 h-5/6 overflow-y-scroll">
-                                <button class="w-full" @click="getDetail">
-                                    <tr class="flex font-eng border-b-2 border-primary text-sm">
-                                        <td class="text-center w-1/4">000001</td>
-                                        <td class="text-center w-1/4">User 1</td>
-                                        <td class="text-center w-1/4">Name Sun</td>
-                                        <td class="text-center w-1/4">08:29:30</td>
+                                    <tr v-for="(user, index) in allUsers" :key="index" class="flex font-eng border-b-2 border-primary py-2 text-sm">
+                                        <button class="flex w-full" @click="getDetail(user.id)">
+                                            <td class="text-center w-1/6">{{user.id}}</td>
+                                            <td class="text-center w-2/6">{{user.name}}</td>
+                                            <td class="text-center w-3/6">{{getLoginTime(user.updated_at)}}</td>
+                                        </button>
                                     </tr>
-                                </button>
                             </tbody>
                         </div>
                     </table>
@@ -45,18 +46,42 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import AdminStore from "@/store/Admin"
+import moment from 'moment'
+
 export default {
     name:'UserList',
     components: {
         Header,
         Footer
     },
+    data() {
+        return {
+            allUsers: [],
+            searchList: [],
+        }
+    },
+    created(){
+        this.fetchAllUser()
+    },
     methods:{
-        async getDetail(){
-            this.$router.push('/userDetail')
+        async getDetail(userId){
+            this.$router.push('/user/' + userId)
         },
         async backPage(){
             this.$router.go(-1)
+        },
+        async fetchAllUser(){
+            await AdminStore.dispatch('fetchAllUser')
+            this.searchList = AdminStore.getters.users
+            this.allUsers = AdminStore.getters.users
+        },
+        async fetchUser(event){
+            await AdminStore.dispatch('fetchUser', event.target.value)
+            this.allUsers = [AdminStore.getters.users]
+        },
+        getLoginTime(time){
+            return moment(time).format("DD-MM-YYYY HH:mm:ss")
         },
     },
 }

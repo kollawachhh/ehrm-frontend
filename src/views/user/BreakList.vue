@@ -97,8 +97,6 @@ export default {
                 leave.type = "ลาคลอด"
             }
             })
-
-            console.log(this.leaveList)
         },
         async backPage(){
             this.$router.go(-1)
