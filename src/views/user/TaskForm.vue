@@ -13,43 +13,53 @@
                         <span class="font-th font-bold text-lg">{{ this.user.name }}</span>
                         <br>
                         <span class="font-eng text-sm">{{ this.user.position }}</span>
+                        <br>
+                        <span class="font-eng text-sm">{{ this.user.department }}</span>
                     </div>
                 </div>
-                <hr class="flex w-80 mx-auto my-5 border-1 border-white">
-                <form @submit.prevent="submit">
+                <hr class="flex w-80 mx-auto mb-5 border-1 border-white">
                     <div class="flex w-80 bg-white mb-6 pt-1 mx-auto rounded-md">
                         <span class="font-th pl-3 pr-2">เวลาเข้า</span>
-                        <vue-timepicker 
-                            format="HH:mm A" 
-                            close-on-complete 
-                            manual-input 
-                            v-model="taskIn" 
-                            placeholder="--:--" 
-                            input-class="font-eng text-center text-primary font-2xl border ml-5 mr-5 my-5 font-bold">
-                        </vue-timepicker>
-                        <img src="icons/task_in.png" alt="" class="w-8 h-8 ml-12">
+                        <button 
+                            v-if="this.form.taskIn === '00:00'"
+                            @click="setTaskInNow" 
+                            class="font-th text-center text-white bg-primary px-5 py-3 rounded-md font-2xl border ml-5 mr-5 my-5 font-bold">
+                            ลงเวลาเข้างาน
+                        </button>
+                        <p 
+                            v-if="this.form.taskIn !== '00:00'"
+                            class="font-th text-center text-primary text-3xl px-3 py-2 rounded-md font-2xl ml-5 mr-5 my-5 font-bold">
+                            {{ this.form.taskIn }} น.
+                        </p>
+                        <img src="icons/task_in.png" alt="" class="w-8 h-8 ml-8">
                     </div>
                     <div class="flex w-80 bg-white mb-6 pt-1 mx-auto rounded-md">
                         <span class="font-th pl-3">เวลาออก</span>
-                        <vue-timepicker 
-                            format="HH:mm A" 
-                            close-on-complete 
-                            manual-input 
-                            v-model="taskOut" 
-                            placeholder="--:--" 
-                            input-class="font-eng text-center text-primary font-2xl border ml-5 mr-5 my-5 font-bold">
-                        </vue-timepicker>
-                        <img src="icons/task_out.png" alt="" class="w-8 h-8 ml-12">
+                        <button
+                            :disabled="this.form.taskIn === '00:00'"
+                            v-if="this.form.taskOut === '00:00'"
+                            @click="setTaskOutNow"                            
+                            class="font-th text-center text-white bg-primary px-4 py-3 rounded-md font-2xl border ml-5 mr-5 my-5 font-bold"
+                            v-bind:class="{'bg-gray-300':this.form.taskInNow = false}">
+                            ลงเวลาออกงาน
+                        </button>
+                        <p
+                            v-if="this.form.taskOut !== '00:00'"
+                            class="font-th text-center text-primary text-3xl px-3 py-2 rounded-md font-2xl ml-5 mr-5 my-5 font-bold">
+                            {{this.form.taskOut}} น.
+                        </p>
+                        <img src="icons/task_out.png" alt="" class="w-8 h-8 ml-7">
                     </div>
-                    <div class="flex w-80 bg-white mx-auto rounded-md">
+                    <div class="flex w-80 bg-white mx-auto rounded-md mb-10">
                         <span class="font-th pl-3 py-2">
                             เวลาทำงานรวม
-                            <span class="font-eng text-primary text-2xl px-8">--:--</span>
+                            <span  
+                                class="font-eng text-primary text-2xl px-8">
+                                {{this.form.totalTime}}
+                            </span>
                             ชม.
                         </span>
                     </div>
-                    <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-24">ยืนยัน</button>
-                </form>
             </div>
         </div>
     </div>
@@ -62,35 +72,60 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import AuthUser from '@/store/AuthUser'
+import moment from 'moment'
+import UserService from '@/services/UserService'
 export default {
     data() {
         return {
+            times:[],
             form: {
-                taskIn: "",
-                taskOut: "",
-                totalTime: "",
+                taskIn: "00:00",
+                taskOut: "00:00",
+                totalTime: "00:00",
+                taskInNow: false,
+                taskOutNow: false,
             },
             user: {
                 name: "",
                 position: "",
+                department: "",
             },
             role: '',
         }
     },
-    created() {
+
+    async created() {
+        await this.filterUserData()
         this.user.name = AuthUser.getters.user.name;
         this.user.position = AuthUser.getters.user.position;
+        this.user.department = AuthUser.getters.user.department;
     },
     mounted(){
         if (!this.isAuthen()) {
             this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
             this.$router.push("/")
         }
-        setUser
     },
     methods:{
         async submit(){
             this.$router.push('/task')
+        },
+        async setTaskInNow(){
+            this.form.taskInNow = true
+            this.form.taskIn = moment().format('HH:mm')
+            let today = new Date();
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            let time = moment().format('HH:mm:ss')
+            await UserService.addTimeIn(time,date)
+        },
+        async setTaskOutNow(){
+            this.form.taskOutNow = true
+            this.form.taskOut = moment().format('HH:mm')
+            this.form.totalTime = moment.utc(moment(this.form.taskOut, "HH:mm").diff(moment(this.form.taskIn, "HH:mm"))).format("HH:mm")
+            let today = new Date();
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            let time = moment().format('HH:mm:ss')
+            await UserService.addTimeOut(time,date)
         },
         clearForm() {
             this.form = {
@@ -106,7 +141,18 @@ export default {
                 }
                 return AuthUser.getters.isAuthen
             }
-        }        
+        },
+        async filterUserData(){
+            let logs = await UserService.getTimeById(AuthUser.getters.user.id)
+            logs.forEach(log => {   
+                if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
+                    this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")
+                    this.form.taskOut = moment(log.logout_time, "HH:mm:ss").format("HH:mm")
+                    this.form.totalTime = moment(log.total_hours, "HH:mm:ss").format("HH:mm")
+                }
+            });
+        },
+        
     },
     name:'TaskForm',
     components:{

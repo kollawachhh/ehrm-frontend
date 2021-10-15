@@ -2,16 +2,16 @@
     <div class="container h-screen bg-content">
         <Header></Header>
         <div class="flex flex-wrap mt-6 w-screen h-3/4">
-            <div class="mx-auto h-full bg-gray-300 rounded-md">
-                <div class="flex bg-primary px-28 py-5 rounded-t-md">
-                    <span class="font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+            <div class="mx-auto h-full bg-gray-300 rounded-md ">
+                <div class="flex bg-primary py-5 rounded-t-md ">
+                    <a href="/home" class="font-th ml-5 text-xl px-2 text-white">&#60;</a>
+                    <span class="flex font-th text-white text-xl ml-5">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <select v-model="date.month" name="months" id="months" class="flex ml-5 w-5 bg-primary text-white">
+                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
+                    </select>
                 </div>
-                <div class="bg-gray-300 rounded-b-md h-5/6">
-                    <div v-if="role === 'Admin'" class="flex h-7 mx-4 mt-5">
-                        <input type="text" placeholder="ค้นหาผู้ใช้" class="flex font-th text-primary w-56 px-3 mr-3 rounded-md">
-                        <button type="submit" class="font-th text-white px-6 bg-primary rounded-md">ค้นหา</button>
-                    </div>
-                    <table class="mx-auto h-full" v-bind:class="{'mt-5':role === 'Admin','mt-1':role !== 'Admin'}">
+                <div class="bg-gray-300 rounded-b-md h-5/6 px-2">
+                    <table class="mx-auto h-full mt-1 ">
                         <thead class="flex border-b-4 border-primary">
                             <tr class="font-th w-80 text-md">
                                 <th class="w-20 border-l-2 border-primary"><span class="mx-auto">วันที่</span></th>
@@ -20,7 +20,7 @@
                                 <th class="w-20 border-l-2 border-r-2 border-primary"><span class="mx-auto">เวลารวม</span></th>
                             </tr>
                         </thead>
-                        <div class="flex w-80 overflow-y-scroll" v-bind:class="{'h5/6':role === 'Admin', 'h-full' :role !== 'Admin'}">
+                        <div class="flex h-full w-80 overflow-y-scroll">
                             <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}">
                                 <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm"
                                     v-for="(log, index) in logList" :key="index">
@@ -59,6 +59,20 @@ export default {
             },
             logList: [],
             role: '',
+            months:[
+                { id: '1', name: 'January' },
+                { id: '2', name: 'Febuary' },
+                { id: '3', name: 'March' },
+                { id: '4', name: 'April' },
+                { id: '5', name: 'May' },
+                { id: '6', name: 'June' },
+                { id: '7', name: 'July' },
+                { id: '8', name: 'August' },
+                { id: '9', name: 'September' },
+                { id: '10', name: 'October' },
+                { id: '11', name: 'November' },
+                { id: '12', name: 'December' },
+            ],
         }
     },
     mounted(){
@@ -86,6 +100,7 @@ export default {
         async fetchLogs() {
             await LogStore.dispatch('fetchLogs')
             this.logList = LogStore.getters.logs
+            console.log(LogStore.getters.logs)
         }
     }
 }

@@ -32,7 +32,6 @@ import AuthUser from "@/store/AuthUser"
 
 export default {
   props: [
-    'role'
   ],
   name:'Home',
   components: {
@@ -58,7 +57,8 @@ export default {
         }
         return AuthUser.getters.isAuthen
       }
-    }
+    },
+    
   }
 }
 </script>

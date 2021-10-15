@@ -3,8 +3,9 @@
     <Header></Header>
     <div class="flex flex-wrap w-screen">
         <div class="mx-auto mt-8">
-            <div class="bg-primary px-28 py-5 rounded-t-md">
-                <span class="font-th text-white text-xl">ลงบันทึกลางาน</span>
+            <div class="bg-primary py-5 rounded-t-md">
+                <!-- <a href="/home" class="font-th text-xl px-2 text-white">&#60;</a> -->
+                <span class="font-th pl-28 pr-36 text-white text-xl">เพิ่มผู้ใช้</span>
             </div>
             <div class="bg-gray-300 rounded-b-md pb-4">
                 <form @submit.prevent="submit">
@@ -13,8 +14,8 @@
                         <input type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกชื่อ">
                     </div>
                     <div class="pl-6 pt-5">
-                        <span class="flex font-th pb-2">ชื่อผู้ใช้</span>
-                        <input type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกชื่อผู้ใช้">
+                        <span class="flex font-th pb-2">อีเมลล์</span>
+                        <input type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกอีเมลล์ผู้ใช้">
                     </div>
                     <div class="pl-6 pt-5">
                         <span class="flex font-th pb-2">รหัสผ่าน</span>
@@ -29,7 +30,7 @@
             </div>
         </div>
     </div>
-    <Footer></Footer>
+    <Footer tab='none'></Footer>
   </div>
 </template>
 

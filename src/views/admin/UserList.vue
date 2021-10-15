@@ -4,7 +4,8 @@
         <div class="flex flex-wrap w-screen h-3/4">
             <div class="mx-auto mt-8 h-full bg-gray-300 rounded-md">
                 <div class="flex bg-primary py-5 rounded-t-md">
-                    <span class="font-th mx-auto text-white text-xl">รายการผู้ใช้</span>
+                    <a href="/home" class="font-th ml-5 text-xl px-2 mr-16 text-white">&#60;</a>
+                    <span class="font-th text-white ml-3 text-xl">รายการผู้ใช้</span>
                 </div>
                 <div class=" bg-gray-300 rounded-b-md h-5/6 ">
                     <div class="flex h-7 ml-2 my-5">
@@ -23,19 +24,21 @@
                         </thead>
                         <div class="flex w-80 h-full overflow-y-scroll">
                             <tbody class="w-80 h-5/6 overflow-y-scroll">
-                                <tr class="flex font-eng border-b-2 border-primary text-sm">
-                                    <td class="text-center w-1/4">000001</td>
-                                    <td class="text-center w-1/4">User 1</td>
-                                    <td class="text-center w-1/4">Name Sun</td>
-                                    <td class="text-center w-1/4">08:29:30</td>
-                                </tr>
+                                <button class="w-full" @click="getDetail">
+                                    <tr class="flex font-eng border-b-2 border-primary text-sm">
+                                        <td class="text-center w-1/4">000001</td>
+                                        <td class="text-center w-1/4">User 1</td>
+                                        <td class="text-center w-1/4">Name Sun</td>
+                                        <td class="text-center w-1/4">08:29:30</td>
+                                    </tr>
+                                </button>
                             </tbody>
                         </div>
                     </table>
                 </div>
             </div>
         </div>
-        <Footer tab='tasks'></Footer>
+        <Footer tab='none'></Footer>
     </div>
 </template>
 
@@ -47,7 +50,12 @@ export default {
     components: {
         Header,
         Footer
-    }
+    },
+    methods:{
+        async getDetail(){
+            this.$router.push('/userDetail')
+        },
+    },
 }
 </script>
 

@@ -22,11 +22,11 @@ export default new Vuex.Store({
       // state.jwt = payload.jwt
       state.isAuthen = true 
     },
-    // logoutSuccess(state) {
-    //   state.user = ""
-    //   // state.jwt = ""
-    //   state.isAuthen = false
-    // },
+    logoutSuccess(state) {
+      state.user = ""
+      // state.jwt = ""
+      state.isAuthen = false
+    },
   },
 
   actions: {
@@ -35,13 +35,15 @@ export default new Vuex.Store({
       console.log(res)
       if (res.success) {
         commit("loginSuccess", res)
+        return res
+      } else {
+        return "failed"
       }
-      return res
     },
-    // logout({ commit }) {
-    //   AuthService.logout()
-    //   commit("logoutSuccess")
-    // },
+    logout({ commit }) {
+      AuthService.logout()
+      commit("logoutSuccess")
+    },
     // async register({ commit }, { username, email, password }) {
     //   let res = await AuthService.register({ username, email, password })
     //   if (res.success) {

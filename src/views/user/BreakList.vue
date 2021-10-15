@@ -1,70 +1,27 @@
 <template>
     <div class="container h-screen bg-content">
         <Header></Header>
-        <div class="flex flex-wrap w-screen h-4/5">
-            <div class="mx-auto mt-6 h-5/6">
-                <div class="bg-primary px-28 py-5 rounded-t-md">
-                    <span class="font-th text-white text-xl">{{ this.date.month  }} - {{ this.date.year }}</span>
+        <div class="flex h-5/6">
+            <div class="mx-auto mt-6 w-10/12">
+                <div class="flex bg-primary py-5 rounded-t-md">
+                    <span class="flex font-th text-white text-xl ml-5">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <select v-model="date.month" name="months" id="months" class="flex ml-5 w-5 bg-primary text-white">
+                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
+                    </select>
                 </div>
-                
-                <div class="bg-gray-300 rounded-b-md h-full py-3">
-                    <div v-if="role === 'Admin'" class="flex ml-4 mt-3">
-                        <input type="text" placeholder="ค้นหาผู้ใช้" class="flex font-th text-primary w-56 px-3 mr-3 rounded-md">
-                        <button type="submit" class="font-th text-white px-6 bg-primary rounded-md">ค้นหา</button>
-                    </div>
-                    <div class="overflow-scroll" v-bind:class="{'h-5/6 mt-5':role === 'Admin','h-full mt-0':role !== 'Admin'}">
-                        <div class="pb-2">
-                            <span class="flex font-th pl-4">ลาป่วย</span>
+                <div class="bg-gray-300 rounded-b-md h-5/6 py-3">
+                    <div class="h-full mt-0 overflow-scroll">
+                        <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
+                            <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                                <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                                <span class="flex">วันที่ : 3 - 5 วัน</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <span class="flex font-th pl-4">ลาป่วย</span>
-                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                                <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                                <span class="flex">วันที่ : 3 - 5 วัน</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <span class="flex font-th pl-4">ลาป่วย</span>
-                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                                <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                                <span class="flex">วันที่ : 3 - 5 วัน</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <span class="flex font-th pl-4">ลาป่วย</span>
-                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                                <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                                <span class="flex">วันที่ : 3 - 5 วัน</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <span class="flex font-th pl-4">ลาป่วย</span>
-                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                                <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                                <span class="flex">วันที่ : 3 - 5 วัน</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <span class="flex font-th pl-4">ลาป่วย</span>
-                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : มีไข้สูง</span>
-                                <span class="flex mb-3">ระยะเวลา : 3 วัน</span>
-                                <span class="flex">วันที่ : 3 - 5 วัน</span>
+                                <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
+                                <span class="flex mb-3">ระยะเวลา : {{ leave.leave_date }} วัน</span>
+                                <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
         </div>
         <Footer tab='breaks'></Footer>
     </div>
@@ -75,6 +32,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import AuthUser from '@/store/AuthUser'
 import LeaveStore from '@/store/Leave'
+import Dropdown from 'vue-simple-search-dropdown';
 export default {
     props:[
         'role',
@@ -82,7 +40,8 @@ export default {
     name:'BreakList',
     components: {
         Header,
-        Footer
+        Footer,
+        Dropdown,
     },
     data() {
         return {
@@ -92,6 +51,20 @@ export default {
             },
             leaveList: [],
             role:'',
+            months:[
+                { id: '1', name: 'January' },
+                { id: '2', name: 'Febuary' },
+                { id: '3', name: 'March' },
+                { id: '4', name: 'April' },
+                { id: '5', name: 'May' },
+                { id: '6', name: 'June' },
+                { id: '7', name: 'July' },
+                { id: '8', name: 'August' },
+                { id: '9', name: 'September' },
+                { id: '10', name: 'October' },
+                { id: '11', name: 'November' },
+                { id: '12', name: 'December' },
+            ],
         }
     },
     mounted(){
@@ -112,6 +85,19 @@ export default {
         async fetchLeaves() {
             await LeaveStore.dispatch('fetchLeaves')
             this.leaveList = LeaveStore.getters.leaves
+            this.leaveList.forEach(function(leave) {
+            if (leave.type == "sick_leave") {
+                leave.type = "ลาป่วย";
+            } else if (leave.type == "personal_leave") {
+                leave.type = "ลากิจ"
+            } else if (leave.type == "vacation_leave") {
+                leave.type = "ลาพักร้อน"
+            } else if (leave.type == "maternity_leave") {
+                leave.type = "ลาคลอด"
+            }
+            })
+
+            console.log(this.leaveList)
         }        
     },
     created() {
@@ -123,6 +109,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
