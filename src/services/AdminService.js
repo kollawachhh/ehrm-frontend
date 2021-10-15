@@ -5,7 +5,9 @@ const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000
 export default {
     async getAllUser(){
         try{
-            let res = await Axios.get(`${api_endpoint}/api/admin/all-users`)
+            let url = `${api_endpoint}/api/admin/all-users`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
             return res
         }catch (e){
             if (e.response.status === 400) {
@@ -26,7 +28,9 @@ export default {
     async getUser(id){
         
         try{
-            let res = await Axios.get(`${api_endpoint}/api/admin/user/${id}`)
+            let url = `${api_endpoint}/api/admin/user/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
             return res
         }catch (e){
             if (e.response.status === 400) {
@@ -46,7 +50,9 @@ export default {
     },
     async createUser(newUser){
         try{
-            let res = await Axios.post(`${api_endpoint}/api/admin/create-user`, newUser)
+            let url = `${api_endpoint}/api/admin/create-user`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, newUser, header)
             return res
         }catch (e){
             if (e.response.status === 400) {
