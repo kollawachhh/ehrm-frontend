@@ -11,7 +11,7 @@
                 <form @submit.prevent="submit">
                     <div class="pl-6 pt-5">
                         <span class="flex font-th pb-2">ประเภทการลางาน</span>
-                        <select v-model="form.type" name="type" id="types" class="flex mr-5 p-1 w-11/12 bg-white">
+                        <select v-model="form.type" name="type" id="types" class="flex mr-5 p-1 w-11/12 bg-white font-th">
                             <option value="" disabled selected hidden>เลือกประเภท</option>
                             <option 
                                 v-for="(type, index) in types" :key="index" :value='type.name' >
@@ -26,21 +26,21 @@
                     <div class="pl-6 pt-5">
                         <span class="flex font-th pb-2">ตั้งแต่วันที่</span>
                         <date-picker v-model="form.startDate" type="date" 
-                        :default-value="new Date()" :disabled-date="notBeforeToday" 
+                        :default-value="new Date()" :disabled-date="notBeforeToday" @change="change"
                          placeholder='วันที่ลางาน' 
                         :clearable=false 
-                        class="center font-eng bg-white w-11/12 mb-2 p-1"></date-picker>
+                        class="center bg-white w-11/12 mb-2 p-1 font-th"></date-picker>
                         <span class="flex font-th pb-2">ถึง</span>
                         <date-picker v-if="this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
                         :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
                         value-type="format" placeholder='วันที่ลางาน' 
                         :clearable=false disabled
-                        class="center font-eng bg-white w-11/12 mb-2 p-1"></date-picker>
+                        class="center font-th bg-white w-11/12 mb-2 p-1"></date-picker>
                         <date-picker v-if="!this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
                         :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
                         value-type="format" placeholder='วันที่ลางาน' 
                         :clearable=false
-                        class="center font-eng bg-white w-11/12 mb-2 p-1"></date-picker>
+                        class="center font-th bg-white w-11/12 mb-2 p-1"></date-picker>
                         <br>
                         <span class="font-th">เป็นเวลา {{form.totalDate}} วัน</span>
                     </div>
@@ -92,8 +92,10 @@ export default {
         }
     },
     methods:{
-        notBeforeToday(date) {
+        change() {
             this.disableDatePicker = false;
+        },
+        notBeforeToday(date) {
             return date < new Date(new Date());
         },
         // notBeforeTodaySelect(date) {
