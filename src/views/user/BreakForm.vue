@@ -73,7 +73,6 @@ export default {
                 startDate: "",
                 endDate: "",
                 totalDate: 0,
-                id: "",
             },
             disableDatePicker: true,
             role:'',
@@ -106,8 +105,7 @@ export default {
             this.form.reason !== null &&
             this.form.startDate !== null &&
             this.form.endDate !== null &&
-            this.form.totalDate !== 0 &&
-            this.form.id !== null) {
+            this.form.totalDate !== 0) {
                 this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
                 await Leave.dispatch("leaves", this.form);
                 this.clearForm();
@@ -124,15 +122,12 @@ export default {
                 startDate: "",
                 endDate: "",
                 total: "",
-                id: "",
             }
         },
         isAuthen() {
             if(AuthUser.getters.user != null){
                 if(AuthUser.getters.user.is_admin === 1){
                     this.role = 'Admin'
-                } else {
-                    this.form.id = AuthUser.getters.user.id
                 }
                 return AuthUser.getters.isAuthen
             }

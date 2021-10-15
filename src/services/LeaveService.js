@@ -7,7 +7,7 @@ export default {
     async getLeaves() {
         let url = `${api_endpoint}/api/leaves/mine`;
         let headers = AuthService.getApiHeader();
-        try{
+        try {
             let res = await Axios.get(url, headers)
             console.log(res)
             return res
@@ -31,7 +31,7 @@ export default {
     getUser() {
         return user
     },
-    async addLeaves({ startDate, endDate, type, totalDate, reason, id }) {
+    async addLeaves({ startDate, endDate, type, totalDate, reason }) {
         console.log("worked")
         try {
             let url = `${api_endpoint}/api/user/create-leave`
@@ -40,10 +40,11 @@ export default {
                 date_end: endDate,
                 type: type,
                 leave_dates: totalDate,
-                cause: reason,
-                user_id: id
+                cause: reason
             }
-            let res = await Axios.post(url, body)
+            let headers = AuthService.getApiHeader();
+            let res = await Axios.post(url, body, headers)
+            console.log(res)
             if (res.status === 200) {
                 let leave = {
                     leave: res.data
