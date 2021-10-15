@@ -4,8 +4,9 @@
         <div class="flex h-5/6">
             <div class="mx-auto mt-6 w-10/12">
                 <div class="flex bg-primary py-5 rounded-t-md">
-                    <span class="flex font-th text-white text-xl ml-5">{{ this.date.month  }} - {{ this.date.year }}</span>
-                    <select v-model="date.month" name="months" id="months" class="flex ml-5 w-5 bg-primary text-white">
+                    <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
+                    <span class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
                     </select>
                 </div>
@@ -34,9 +35,6 @@ import AuthUser from '@/store/AuthUser'
 import LeaveStore from '@/store/Leave'
 import Dropdown from 'vue-simple-search-dropdown';
 export default {
-    // props:[
-    //     'role',
-    // ],
     name:'BreakList',
     components: {
         Header,
@@ -96,9 +94,10 @@ export default {
                 leave.type = "ลาคลอด"
             }
             })
-
-            console.log(this.leaveList)
-        }        
+        },
+        async backPage(){
+            this.$router.go(-1)
+        },   
     },
     created() {
         let today = new Date();

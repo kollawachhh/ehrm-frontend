@@ -30,8 +30,9 @@ export default new Vuex.Store({
             let payload = await LeaveService.getLeaves();
             commit("fetch", payload.data)
         },
-        async leaves({ commit }, { startDate, endDate, type, total, reason, id }) {
-            let res = await LeaveService.addLeaves({ startDate, endDate, type, total, reason, id })
+        async leaves({ commit }, { startDate, endDate, type, totalDate, reason, id }) {
+            console.log(startDate)
+            let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason, id })
             if (res.success) {
                 commit("loginSuccess", res)
             }

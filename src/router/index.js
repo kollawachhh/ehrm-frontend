@@ -44,7 +44,7 @@ const routes = [
     component: BreakForm,
   },
   {
-    path: '/userList',
+    path: '/user',
     name: 'UserList',
     component: UserList,
   },
@@ -54,7 +54,7 @@ const routes = [
     component: UserForm,
   },
   {
-    path: '/userDetail',
+    path: '/user/:id',
     name: 'UserDetail',
     component: UserDetail,
   }

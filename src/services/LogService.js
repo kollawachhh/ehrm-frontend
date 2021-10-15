@@ -15,4 +15,12 @@ export default {
         }
 
     },
+    async getAllLogsToday(){
+        try{
+            let res = await Axios.get(`${api_endpoint}/api/logs`)
+            return res
+        }catch (e){
+            
+        }
+    }
 }

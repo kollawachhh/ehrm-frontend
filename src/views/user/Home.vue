@@ -13,7 +13,7 @@
         </a>
       </div>
       <div v-if="role === 'Admin'" class="w-screen">
-        <a href="/userList" class="bg-gray-300 flex mx-auto mt-10 rounded-md w-5/6">
+        <a href="/user" class="bg-gray-300 flex mx-auto mt-10 rounded-md w-5/6">
           <img src="icons/employee_manage_btn.png" alt="" class="flex w-24 h-24 ml-2 my-5">
           <span class="font-th text-2xl ml-5 mt-14">จัดการข้อมูลผู้ใช้</span>
         </a>

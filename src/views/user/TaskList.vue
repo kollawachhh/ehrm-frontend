@@ -4,9 +4,9 @@
         <div class="flex flex-wrap mt-6 w-screen h-3/4">
             <div class="mx-auto h-full bg-gray-300 rounded-md ">
                 <div class="flex bg-primary py-5 rounded-t-md ">
-                    <a href="/home" class="font-th ml-5 text-xl px-2 text-white">&#60;</a>
-                    <span class="flex font-th text-white text-xl ml-5">{{ this.date.month  }} - {{ this.date.year }}</span>
-                    <select v-model="date.month" name="months" id="months" class="flex ml-5 w-5 bg-primary text-white">
+                    <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
+                    <span class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
                     </select>
                 </div>
@@ -23,7 +23,7 @@
                         <div class="flex h-full w-80 overflow-y-scroll">
                             <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}">
                                 <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm"
-                                    v-for="(log, index) in logList" :key="index">
+                                    v-for="(log, index) in logList.data" :key="index">
                                     <td class="text-center w-1/4">{{ log.date }}</td>
                                     <td class="text-center w-1/4">{{ log.login_time }}</td>
                                     <td class="text-center w-1/4">{{ log.logout_time }}</td>
@@ -85,7 +85,17 @@ export default {
         let today = new Date();
         this.date.month = today.toLocaleString('default', { month: 'long' })
         this.date.year = today.getFullYear()
-        this.fetchLogs()
+        if(AuthUser.getters.user != null){
+            if(AuthUser.getters.user.is_admin === 1){
+                this.role = 'Admin'
+            }
+        }
+        if(this.role === 'Admin'){
+            this.fetchAllLogsToday()
+        }else{
+            this.fetchLogs()
+        }
+        
     },
     methods:{
         isAuthen() {
@@ -95,13 +105,20 @@ export default {
                 }
             return AuthUser.getters.isAuthen
             }
-            
         },
         async fetchLogs() {
             await LogStore.dispatch('fetchLogs')
             this.logList = LogStore.getters.logs
             console.log(LogStore.getters.logs)
-        }
+        },
+        async fetchAllLogsToday(){
+            await LogStore.dispatch('fetchAllLogsToday')
+            this.logList = LogStore.getters.logs
+            console.log(this.logList)
+        },
+        async backPage(){
+            this.$router.go(-1)
+        },
     }
 }
 </script>
