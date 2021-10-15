@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import LeaveService from '@/services/LeaveService'
-import AuthUser from '@/store/AuthUser'
 
 Vue.use(Vuex)
 
@@ -19,7 +18,7 @@ export default new Vuex.Store({
 
     mutations: {
         fetch(state, payload) {
-            state.data = payload;
+            state.data = payload.data;
         },
         add(state, { payload }) {
             state.data.push(payload)
@@ -28,7 +27,7 @@ export default new Vuex.Store({
 
     actions: {
         async fetchLeaves({ commit }) {
-            let payload = await LeaveService.getLeaves(AuthUser.getters.user.id);
+            let payload = await LeaveService.getLeaves();
             commit("fetch", payload.data)
         },
         async leaves({ commit }, { startDate, endDate, type, totalDate, reason, id }) {

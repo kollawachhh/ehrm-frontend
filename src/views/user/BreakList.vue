@@ -16,7 +16,7 @@
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
                                 <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
-                                <span class="flex mb-3">ระยะเวลา : {{ leave.leave_date }} วัน</span>
+                                <span class="flex mb-3">ระยะเวลา : {{ leave.leave_dates }} วัน</span>
                                 <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
                             </div>
                         </div>

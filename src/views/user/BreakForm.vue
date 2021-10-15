@@ -98,11 +98,6 @@ export default {
         notBeforeToday(date) {
             return date < new Date(new Date());
         },
-        // notBeforeTodaySelect(date) {
-        //     console.log(this.form.startDate)
-        //     console.log(date)
-        //     return new Date(new Date()) < this.form.startDate;
-        // },
         notBeforeTodaySelect(date) {
             return date < this.form.startDate;
         },
