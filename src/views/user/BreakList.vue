@@ -15,9 +15,15 @@
                         <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
-                                <span class="flex mb-3">ระยะเวลา : {{ leave.leave_dates }} วัน</span>
-                                <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex mb-3">เหตุผล <p class="ml-5 mr-2">:</p> {{ leave.cause }}</span>
+                                <span class="flex mb-3">ระยะเวลา <p class="ml-2 mr-2">:</p> {{ leave.leave_dates }} วัน</span>
+                                <span class="flex mb-3">วันที่ <p class="ml-9 mr-2">:</p> {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex">
+                                    สถานะ <p class="ml-5 mr-2">:</p>
+                                    <span v-if="status === ''" class="text-emerald-500">ได้รับการยืนยัน</span>
+                                    <span v-if="status === 'pending'" class="text-blue-500">รอการยืนยัน</span>
+                                    <span v-if="status === 'cancel'" class="text-red-500">ปฏิเสธการยืนยัน</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -63,6 +69,7 @@ export default {
                 { id: '11', name: 'November' },
                 { id: '12', name: 'December' },
             ],
+            status:'',
         }
     },
     mounted(){
