@@ -19,6 +19,7 @@ module.exports = {
         indigo: colors.indigo,
         blueGray: colors.blueGray,
         blue: colors.blue,
+        red: colors.red,
       },
       fontFamily: {
         eng:['Ubuntu'],
