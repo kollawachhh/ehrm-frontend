@@ -52,7 +52,7 @@ export default {
   methods:{
     isAuthen() {
       if(AuthUser.getters.user != null){
-        if(AuthUser.getters.user.is_admin === 1){
+        if(AuthUser.getters.user.role === 'admin'){
           this.role = 'Admin'
         }
         return AuthUser.getters.isAuthen

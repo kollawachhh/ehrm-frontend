@@ -22,11 +22,11 @@ export default new Vuex.Store({
     actions: {
         async fetchLogs({ commit }) {
             let payload = await LogService.getLogs();
-            commit("fetch", payload.data)
+            commit("fetch", payload)
         },
-        async fetchAllLogsToday({ commit }){
-            let payload = await LogService.getAllLogsToday();
-            commit("fetch", payload.data)
+        async fetchLogsByDate({ commit }, date) {
+            let payload = await LogService.getLogsByDate(date);
+            commit("fetch", payload)
         }
     },
 

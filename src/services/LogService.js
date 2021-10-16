@@ -15,9 +15,11 @@ export default {
         }
 
     },
-    async getAllLogsToday(){
+    async getLogsByDate(date) {
+        let url = `${api_endpoint}/api/logs/by-date/${date}`;
+        let headers = AuthService.getApiHeader();
         try{
-            let res = await Axios.get(`${api_endpoint}/api/logs`)
+            let res = await Axios.get(url, headers)
             return res
         }catch (e){
             

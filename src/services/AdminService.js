@@ -1,4 +1,5 @@
 import Axios from "axios"
+import AuthService from '@/services/AuthService'
 
 const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000"
 
@@ -10,19 +11,19 @@ export default {
             let res = await Axios.get(url, header);
             return res
         }catch (e){
-            if (e.response.status === 400) {
-                console.error(e.response.data.message[0].messages[0].message)
-                return {
-                    success: false,
-                    message: e.response.data.message[0].messages[0].message
-                }
-            } else {
-                console.error(e.response)
-                return {
-                    success: false,
-                    message: "Unknown error: " + e.response
-                }
-            }
+            // if (e.response.status === 400) {
+            //     console.error(e.response.data.message[0].messages[0].message)
+            //     return {
+            //         success: false,
+            //         message: e.response.data.message[0].messages[0].message
+            //     }
+            // } else {
+            //     console.error(e.response)
+            //     return {
+            //         success: false,
+            //         message: "Unknown error: " + e.response
+            //     }
+            // }
         }
     },
     async getUser(id){

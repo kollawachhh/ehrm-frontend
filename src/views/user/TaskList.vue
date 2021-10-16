@@ -5,6 +5,8 @@
             <div class="mx-auto h-full bg-gray-300 rounded-md ">
                 <div class="flex bg-primary py-5 rounded-t-md ">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
+                    <!-- <span v-if="this.role === 'Admin'" class="flex font-th text-white text-xl mx-auto">รายการลงงาน {{ this.date.day  }}</span>
+                    <span v-else class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span> -->
                     <span class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
                     <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
@@ -44,6 +46,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import AuthUser from '@/store/AuthUser'
 import LogStore from '@/store/Log'
+
 export default {
 
     name:'TaskList',
@@ -56,6 +59,7 @@ export default {
             date: {
                 month: "",
                 year: "",
+                day: ""
             },
             logList: [],
             role: '',
@@ -81,19 +85,20 @@ export default {
             this.$router.push("/")
         }
     },
-    created() {
+    async created() {
         let today = new Date();
         this.date.month = today.toLocaleString('default', { month: 'long' })
-        this.date.year = today.getFullYear()
-        if(AuthUser.getters.user != null){
-            if(AuthUser.getters.user.is_admin === 1){
+        this.date.year = today.getFullYear();
+        this.date.day = today.toLocaleDateString('en-CA');
+        if (AuthUser.getters.user != null){
+            if(AuthUser.getters.user.role === "admin"){
                 this.role = 'Admin'
             }
         }
-        if(this.role === 'Admin'){
-            this.fetchAllLogsToday()
-        }else{
-            this.fetchLogs()
+        if (this.role === 'Admin'){
+            await this.fetchLogsByDate()
+        } else {
+            await this.fetchLogs()
         }
         
     },
@@ -109,12 +114,11 @@ export default {
         async fetchLogs() {
             await LogStore.dispatch('fetchLogs')
             this.logList = LogStore.getters.logs
-            console.log(LogStore.getters.logs)
         },
-        async fetchAllLogsToday(){
-            await LogStore.dispatch('fetchAllLogsToday')
+        async fetchLogsByDate() {
+            let date = new Date().toLocaleDateString('en-CA');
+            await LogStore.dispatch('fetchLogsByDate', date)
             this.logList = LogStore.getters.logs
-            console.log(this.logList)
         },
         async backPage(){
             this.$router.go(-1)
