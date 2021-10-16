@@ -1,11 +1,14 @@
 import Axios from 'axios'
-import AuthUser from '@/store/AuthUser'
+import AuthService from '@/services/AuthService'
+
 const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000"
 
 export default {
-    async getLogs(id) {
+    async getLogs() {
+        let url = `${api_endpoint}/api/logs/mine`;
+        let headers = AuthService.getApiHeader();
         try{
-            let res = await Axios.get(`${api_endpoint}/api/logs/${id}`)
+            let res = await Axios.get(url, headers)
             return res
         }catch (e){
             console.log("can't get logs");
@@ -14,16 +17,13 @@ export default {
     },
     async addTimeIn(payload) {
         let url = api_endpoint + "/api/user/start-work"
-        let user = AuthUser.getters.user
+        let headers = AuthService.getApiHeader();
         let body ={
             start_time : payload.time,
-            user_id : user.id,
             date : payload.date
         }
         try {
-        //   let headers = AuthService.getApiHeader()
-          let res = await Axios.post(url, body)
-          console.log(res);
+          let res = await Axios.post(url, body, headers)
           if(res.status === 200) {
             return {
               success: true,
@@ -53,16 +53,15 @@ export default {
       },
       async addTimeOut(payload) {
         let url = api_endpoint + "/api/user/end-work"
-        let user = AuthUser.getters.user
+        let headers = AuthService.getApiHeader();
         let body ={
             end_time : payload.time,
-            user_id : user.id,
             date : payload.date
         }
         console.log(body)
         try {
         //   let headers = AuthService.getApiHeader()
-          let res = await Axios.post(url, body)
+          let res = await Axios.post(url, body, headers)
           if(res.status === 200) {
             return {
               success: true,
@@ -97,7 +96,14 @@ export default {
         } catch(e) {
             console.log("can't get time");
         }
-      }
-    
-}
+      },
+      async getAllLogsToday(){
+        try{
+            let res = await Axios.get(`${api_endpoint}/api/logs`)
+            return res
+        }catch (e){
+            
+        }
+    }
+  }
     

@@ -4,8 +4,9 @@
         <div class="flex h-5/6">
             <div class="mx-auto mt-6 w-10/12">
                 <div class="flex bg-primary py-5 rounded-t-md">
-                    <span class="flex font-th text-white text-xl ml-5">{{ this.date.month  }} - {{ this.date.year }}</span>
-                    <select v-model="date.month" name="months" id="months" class="flex ml-5 w-5 bg-primary text-white">
+                    <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
+                    <span class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
                     </select>
                 </div>
@@ -14,9 +15,15 @@
                         <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
-                                <span class="flex mb-3">ระยะเวลา : {{ leave.leave_date }} วัน</span>
-                                <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex mb-3">เหตุผล <p class="ml-5 mr-2">:</p> {{ leave.cause }}</span>
+                                <span class="flex mb-3">ระยะเวลา <p class="ml-2 mr-2">:</p> {{ leave.leave_dates }} วัน</span>
+                                <span class="flex mb-3">วันที่ <p class="ml-9 mr-2">:</p> {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex">
+                                    สถานะ <p class="ml-5 mr-2">:</p>
+                                    <span v-if="status === ''" class="text-emerald-500">ได้รับการยืนยัน</span>
+                                    <span v-if="status === 'pending'" class="text-blue-500">รอการยืนยัน</span>
+                                    <span v-if="status === 'cancel'" class="text-red-500">ปฏิเสธการยืนยัน</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -34,9 +41,6 @@ import AuthUser from '@/store/AuthUser'
 import LeaveStore from '@/store/Leave'
 import Dropdown from 'vue-simple-search-dropdown';
 export default {
-    props:[
-        'role',
-    ],
     name:'BreakList',
     components: {
         Header,
@@ -65,6 +69,7 @@ export default {
                 { id: '11', name: 'November' },
                 { id: '12', name: 'December' },
             ],
+            status:'',
         }
     },
     mounted(){
@@ -96,9 +101,10 @@ export default {
                 leave.type = "ลาคลอด"
             }
             })
-
-            console.log(this.leaveList)
-        }        
+        },
+        async backPage(){
+            this.$router.go(-1)
+        },   
     },
     created() {
         let today = new Date();

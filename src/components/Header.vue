@@ -2,8 +2,8 @@
     <nav class="wrapper">
         <a href="/home" class="flex font-eng font-bold text-white text-9xl h-1/4 p-7 mr-auto sm:text-3xl ">EHRM</a>
         <button @click.prevent="logout" class="flex font-th text-white text-lg px-5">
-            <p class="pr-3 pt-7">{{ this.user.name }}</p> 
-            <img src="icons/user_test_img.png" alt="" class="rounded-full bg-white h-16 w-16 ml-auto  my-3">
+            <p class="pr-3 pt-7 font-th">{{ this.user.name }}</p> 
+            <img src="/icons/user_test_img.png" alt="" class="rounded-full bg-white h-16 w-16 ml-auto  my-3">
         </button>
     </nav>
     
@@ -27,8 +27,8 @@ export default {
     methods:{
         async logout() {
             this.$fire({
-                title: 'กำลังจะลงชื่อออก',
-                text: "คุณต้องการลงชื่อออกใช่หรือไม่?",
+                title: 'กำลังจะออกจากระบบ',
+                text: "คุณต้องการออกจากระบบใช่หรือไม่?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -36,7 +36,12 @@ export default {
                 confirmButtonText: 'ใช่',
                 cancelButtonText: 'ไม่',
             }).then((r) => {
-                //logout
+                console.log(r)
+                if(r.value){
+                    AuthUser.dispatch('logout')
+                    this.$swal("ออกจากระบบแล้ว!", `คุณได้ทำการออกจากระบบ`, "success")
+                    this.$router.push('/')
+                }
             });
         }
     },

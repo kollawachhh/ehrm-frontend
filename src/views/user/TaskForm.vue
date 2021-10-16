@@ -1,10 +1,11 @@
 <template>
   <div class="container h-screen bg-content">
     <Header></Header>
-    <div class="flex mt-6 w-screen h-4/5">
-        <div class="mx-auto h-5/6">
-            <div class="bg-primary px-28 py-5 rounded-t-md">
-                <span class="font-th text-white text-xl">ลงบันทึกเวลางาน</span>
+    <div class="flex mt-6 w-screen">
+        <div class="mx-auto w-10/12">
+            <div class="bg-primary py-5 rounded-t-md">
+                <button @click="backPage" class="font-th ml-5 mr-10 text-xl px-2 text-white">&#60;</button>
+                <span class="font-th ml-4 text-white text-xl">ลงบันทึกเวลางาน</span>
             </div>
             <div class="bg-gray-300 rounded-b-md pb-4">
                 <div class="flex">
@@ -23,29 +24,29 @@
                         <button 
                             v-if="this.form.taskIn === '00:00'"
                             @click="setTaskInNow" 
-                            class="font-th text-center text-white bg-primary px-5 py-3 rounded-md font-2xl border ml-5 mr-5 my-5 font-bold">
+                            class="font-th text-center text-white bg-primary px-5 py-3 rounded-md font-2xl border mx-5 my-5 font-bold">
                             ลงเวลาเข้างาน
                         </button>
                         <p 
                             v-if="this.form.taskIn !== '00:00'"
-                            class="font-th text-center text-primary text-3xl px-3 py-2 rounded-md font-2xl ml-5 mr-5 my-5 font-bold">
-                            {{ this.form.taskIn }} น.
+                            class="font-th text-center w-3/6 text-primary text-3xl mx-3 py-2 rounded-md font-2xl my-5 font-bold">
+                            {{this.form.taskIn}} น.
                         </p>
                         <img src="icons/task_in.png" alt="" class="w-8 h-8 ml-8">
                     </div>
                     <div class="flex w-80 bg-white mb-6 pt-1 mx-auto rounded-md">
                         <span class="font-th pl-3">เวลาออก</span>
                         <button
-                            :disabled="this.form.taskIn === '00:00'"
+                            :disabled="this.form.taskIn ==='00:00'"
                             v-if="this.form.taskOut === '00:00'"
                             @click="setTaskOutNow"                            
-                            class="font-th text-center text-white bg-primary px-4 py-3 rounded-md font-2xl border ml-5 mr-5 my-5 font-bold"
-                            v-bind:class="{'bg-gray-300':this.form.taskInNow == false}">
+                            class="font-th text-center text-white bg-primary px-4 py-3 rounded-md font-2xl border mx-5 my-5 font-bold"
+                            v-bind:class="{'bg-gray-300':this.form.taskInNow === false}">
                             ลงเวลาออกงาน
                         </button>
                         <p
                             v-if="this.form.taskOut !== '00:00'"
-                            class="font-th text-center text-primary text-3xl px-3 py-2 rounded-md font-2xl ml-5 mr-5 my-5 font-bold">
+                            class="font-th w-3/6 text-center text-primary text-3xl mx-3 py-2 rounded-md font-2xl my-5 font-bold">
                             {{this.form.taskOut}} น.
                         </p>
                         <img src="icons/task_out.png" alt="" class="w-8 h-8 ml-7">
@@ -151,16 +152,22 @@ export default {
             }
         },
         async filterUserData(){
-            let logs = await LogStore.dispatch("getLogs",AuthUser.getters.user.id)
-            logs.forEach(log => {   
+            let logs = await LogStore.dispatch("getLogs")
+            logs.data.forEach(log => { 
                 if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
                     this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")
                     this.form.taskOut = moment(log.logout_time, "HH:mm:ss").format("HH:mm")
                     this.form.totalTime = moment(log.total_hours, "HH:mm:ss").format("HH:mm")
+                    if(this.form.taskIn !== '00:00'){
+                        this.form.taskInNow = true
+                    }
                 }
             });
         },
         
+        async backPage(){
+            this.$router.go(-1)
+        },
     },
     name:'TaskForm',
     components:{

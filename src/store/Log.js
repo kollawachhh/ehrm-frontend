@@ -16,11 +16,8 @@ export default new Vuex.Store({
 
     mutations: {
         fetch(state, payload) {
-            state.data = payload;
-        },
-        add(state, payload) {
-            state.data.push(payload)
-        },
+            state.data = payload.data;
+        }
     },
 
     actions: {
@@ -28,8 +25,8 @@ export default new Vuex.Store({
             let payload = await LogService.getLogs(AuthUser.getters.user.id);
             commit("fetch", payload.data)
         },
-        async getLogs({ commit },id){
-            let res = await LogService.getLogs(id)
+        async getLogs({ commit }){
+            let res = await LogService.getLogs()
             return res.data
         },
         async addTimeIn({ commit },payload){
@@ -39,6 +36,10 @@ export default new Vuex.Store({
         async addTimeOut({ commit },payload){
             let res = await LogService.addTimeOut(payload)
             return res
+        },
+        async fetchAllLogsToday({ commit }){
+            let payload = await LogService.getAllLogsToday();
+            commit("fetch", payload.data)
         }
     },
 

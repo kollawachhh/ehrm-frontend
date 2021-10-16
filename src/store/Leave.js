@@ -19,7 +19,7 @@ export default new Vuex.Store({
 
     mutations: {
         fetch(state, payload) {
-            state.data = payload;
+            state.data = payload.data;
         },
         add(state, { payload }) {
             state.data.push(payload)
@@ -28,11 +28,11 @@ export default new Vuex.Store({
 
     actions: {
         async fetchLeaves({ commit }) {
-            let payload = await LeaveService.getLeaves(AuthUser.getters.user.id);
+            let payload = await LeaveService.getLeaves();
             commit("fetch", payload.data)
         },
-        async leaves({ commit }, { startDate, endDate, type, total, reason, id }) {
-            let res = await LeaveService.addLeaves({ startDate, endDate, type, total, reason, id })
+        async leaves({ commit }, { startDate, endDate, type, totalDate, reason }) {
+            let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason })
             if (res.success) {
                 commit("loginSuccess", res)
             }

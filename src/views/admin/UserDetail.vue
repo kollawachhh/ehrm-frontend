@@ -4,17 +4,18 @@
         <div class="flex flex-wrap w-screen h-3/4">
             <div class="mx-auto mt-8 h-full w-10/12 bg-gray-300 rounded-md">
                 <div class="flex bg-primary py-5 rounded-t-md">
-                    <span class="font-th mx-auto text-white text-xl">ข้อมูลผู้ใช้</span>
+                    <button @click="backPage" class="font-th ml-5 text-xl px-2 mr-16 text-white">&#60;</button>
+                    <span class="font-th text-white ml-6 text-xl">ข้อมูลผู้ใช้</span>
                 </div>
                 <div class="bg-gray-300 w-full rounded-b-md h-5/6 ">
                     <div class="my-5">
-                        <img src="icons/user_test_img.png" alt="" class="w-40 h-40 rounded-full mx-auto  bg-white">
+                        <img src="/icons/user_test_img.png" alt="" class="w-40 h-40 rounded-full mx-auto  bg-white">
                     </div>
                     <hr class="flex w-80 mx-auto  border-1 border-white">
                     <div class="font-th text-primary leading-9 my-5">
-                        <p class="mx-10">ชื่อ : {{this.user.name}} </p>
-                        <p class="mx-10">ตำแหน่ง : {{this.user.position}} </p>
-                        <p class="mx-10">แผนก : {{this.user.department}} </p>
+                        <div class="flex mx-10">ชื่อ<p class="ml-10 mr-5">:</p>{{this.currentUser.name}} </div>
+                        <div class="flex mx-10">ตำแหน่ง<p class="ml-1 mr-5">:</p>{{this.currentUser.position}} </div>
+                        <div class="flex mx-10">แผนก<p class="ml-5 mr-5">:</p>{{this.currentUser.department}} </div>
                     </div>
                     <hr class="flex w-80 mx-auto mb-5 border-1 border-white">
                     <div class="flex font-th text-white">
@@ -31,14 +32,16 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import AdminStore from "@/store/Admin"
+
 export default {
+    created(){
+        this.fetchUser()
+    },
     data() {
         return {
-            user: {
-                name: '',
-                position: '',
-                department: '',
-            },
+            user_id: this.$route.params.id,
+            currentUser:[],
         }
     },
     name:'UserList',
@@ -52,6 +55,14 @@ export default {
         },
         async getBreakList(){
             this.$router.push('/break')
+        },
+        async backPage(){
+            this.$router.go(-1)
+        },
+        async fetchUser(){
+            await AdminStore.dispatch('fetchUser', this.user_id)
+            this.currentUser = AdminStore.getters.users
+            console.log(AdminStore.getters.users)
         },
     },
 }
