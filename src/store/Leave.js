@@ -20,7 +20,7 @@ export default new Vuex.Store({
         fetch(state, payload) {
             state.data = payload.data;
         },
-        add(state, { payload }) {
+        add(state, payload) {
             state.data.push(payload)
         }
     },
@@ -30,13 +30,22 @@ export default new Vuex.Store({
             let payload = await LeaveService.getLeaves();
             commit("fetch", payload.data)
         },
-        async leaves({ commit }, { startDate, endDate, type, totalDate, reason }) {
-            let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason })
-            if (res.success) {
-                commit("loginSuccess", res)
-            }
+        async leaves({ commit }, { startDate, endDate, type, totalDate, reason, status }) {
+            let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason, status })
+            console.log(res)
+                // if (res.success) {
+            commit("add", res)
+                // }
             return res
-        }
+        },
+        async fetchAllLeaves({ commit }) {
+            let payload = await LeaveService.getAllLeaves();
+            commit("fetch", payload)
+        },
+        async fetchLeavesByDate({ commit }, date) {
+            let payload = await LeaveService.getLeavesByDate(date);
+            commit("fetch", payload)
+        },
     },
 
     modules: {
