@@ -40,7 +40,7 @@
                             v-if="this.form.taskOut === '00:00'"
                             @click="setTaskOutNow"                            
                             class="font-th text-center text-white bg-primary px-4 py-3 rounded-md font-2xl border ml-5 mr-5 my-5 font-bold"
-                            v-bind:class="{'bg-gray-300':this.form.taskInNow = false}">
+                            v-bind:class="{'bg-gray-300':this.form.taskInNow == false}">
                             ลงเวลาออกงาน
                         </button>
                         <p
@@ -73,7 +73,7 @@ import Footer from '@/components/Footer.vue'
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import AuthUser from '@/store/AuthUser'
 import moment from 'moment'
-import UserService from '@/services/UserService'
+import LogStore from '@/store/Log'
 export default {
     data() {
         return {
@@ -116,7 +116,11 @@ export default {
             let today = new Date();
             let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
             let time = moment().format('HH:mm:ss')
-            await UserService.addTimeIn(time,date)
+            let payload={
+                time: time,
+                date: date
+            }
+            await LogStore.dispatch("addTimeIn",payload)
         },
         async setTaskOutNow(){
             this.form.taskOutNow = true
@@ -125,7 +129,11 @@ export default {
             let today = new Date();
             let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
             let time = moment().format('HH:mm:ss')
-            await UserService.addTimeOut(time,date)
+            let payload={
+                time: time,
+                date: date
+            }
+            await LogStore.dispatch("addTimeOut",payload)
         },
         clearForm() {
             this.form = {
@@ -143,7 +151,7 @@ export default {
             }
         },
         async filterUserData(){
-            let logs = await UserService.getTimeById(AuthUser.getters.user.id)
+            let logs = await LogStore.dispatch("getLogs",AuthUser.getters.user.id)
             logs.forEach(log => {   
                 if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
                     this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")
