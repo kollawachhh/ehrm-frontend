@@ -49,12 +49,6 @@ export default {
         this.user.name = AuthUser.getters.user.name;
         this.user.position = AuthUser.getters.user.position;
     },
-    methods: {
-        // logout() {
-        //     AuthUser.dispatch('logout')
-        //     this.$router.push('/')
-        // }
-    }
 }
 </script>
 
