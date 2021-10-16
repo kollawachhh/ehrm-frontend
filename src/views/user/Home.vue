@@ -2,7 +2,7 @@
   <div class="container h-screen bg-content">
     <Header></Header>
     <div class="flex flex-wrap w-screen">
-      <div v-if="role !== 'Admin'" class="w-screen">
+      <div v-if="role !== 'admin'" class="w-screen">
         <a href="/taskForm" class="bg-gray-300 flex mx-auto mt-10 rounded-md w-5/6">
           <img src="icons/task_form_btn.png" alt="" class="flex w-24 h-24 ml-2 my-5">
           <span class="font-th text-2xl ml-5 mt-14">ลงเวลางาน</span>
@@ -11,8 +11,12 @@
           <img src="icons/break_form_btn.png" alt="" class="flex w-24 h-24 ml-2 my-5">
           <span class="font-th text-2xl ml-5 mt-14">ลางาน</span>
         </a>
+        <a v-if="role === 'header'" href="/request" class="bg-gray-300 flex mx-auto mt-10 rounded-md w-5/6">
+          <img src="icons/user_request_btn.png" alt="" class="flex w-24 h-24 ml-2 my-5">
+          <span class="font-th text-2xl ml-5 mt-14">คำขอลา</span>
+        </a>
       </div>
-      <div v-if="role === 'Admin'" class="w-screen">
+      <div v-if="role === 'admin'" class="w-screen">
         <a href="/user" class="bg-gray-300 flex mx-auto mt-10 rounded-md w-5/6">
           <img src="icons/employee_manage_btn.png" alt="" class="flex w-24 h-24 ml-2 my-5">
           <span class="font-th text-2xl ml-5 mt-14">จัดการข้อมูลผู้ใช้</span>
@@ -31,8 +35,6 @@ import Footer from '@/components/Footer.vue'
 import AuthUser from "@/store/AuthUser"
 
 export default {
-  props: [
-  ],
   name:'Home',
   components: {
     Header,
@@ -40,7 +42,7 @@ export default {
   },
   data() {
       return {
-        role: '',
+        role: AuthUser.getters.user.role,
       }
   },
   mounted(){
@@ -52,12 +54,10 @@ export default {
   methods:{
     isAuthen() {
       if(AuthUser.getters.user != null){
-        if(AuthUser.getters.user.role === 'admin'){
-          this.role = 'Admin'
-        }
         return AuthUser.getters.isAuthen
       }
-    }
+    },
+  
   }
 }
 </script>

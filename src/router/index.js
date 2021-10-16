@@ -6,6 +6,8 @@ import TaskForm from '../views/user/TaskForm.vue'
 import BreakForm from '../views/user/BreakForm.vue'
 import TaskList from '../views/user/TaskList.vue'
 import BreakList from '../views/user/BreakList.vue'
+import RequestList from '../views/user/RequestList.vue'
+import RequestDetail from '../views/user/RequestDetail.vue'
 import UserList from '../views/admin/UserList.vue'
 import UserForm from '../views/admin/UserForm.vue'
 import UserDetail from '../views/admin/UserDetail.vue'
@@ -57,6 +59,16 @@ const routes = [
     path: '/user/:id',
     name: 'UserDetail',
     component: UserDetail,
+  },
+  {
+    path: '/request',
+    name: 'RequestList',
+    component: RequestList,
+  },
+  {
+    path: '/request/:id',
+    name: 'RequestDetail',
+    component: RequestDetail,
   }
 ]
 

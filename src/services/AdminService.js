@@ -11,19 +11,7 @@ export default {
             let res = await Axios.get(url, header);
             return res
         }catch (e){
-            // if (e.response.status === 400) {
-            //     console.error(e.response.data.message[0].messages[0].message)
-            //     return {
-            //         success: false,
-            //         message: e.response.data.message[0].messages[0].message
-            //     }
-            // } else {
-            //     console.error(e.response)
-            //     return {
-            //         success: false,
-            //         message: "Unknown error: " + e.response
-            //     }
-            // }
+            
         }
     },
     async getUser(id){

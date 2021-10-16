@@ -13,25 +13,37 @@
                         <span class="flex font-th pb-1">ชื่อ</span>
                         <input v-model="form.name" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกชื่อ">
                     </div>
-                    <div class="pl-6 pt-4">
+                    <div class="pl-6 py-4">
                         <span class="flex font-th pb-1">อีเมลล์</span>
                         <input v-model="form.email" type="email" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกอีเมลล์ผู้ใช้">
                     </div>
-                    <div class="pl-6 pt-4">
-                        <span class="flex font-th pb-1">รหัสผ่าน</span>
-                        <input v-model="form.password" type="password" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกรหัสผ่าน">
+                    <span class="font-th ml-6">รหัสผ่าน</span>
+                    <div class="flex w-11/12">    
+                        <div class="pl-6">
+                            <input v-model="form.password" type="password" class="p-2 font-th w-full rounded-md" placeholder="กรอกรหัสผ่าน">
+                        </div>
+                        <div class="ml-5">
+                            <input v-model="form.confirmPassword" type="password" class="p-2 font-th w-full rounded-md" placeholder="ยืนยันรหัสผ่าน">
+                        </div>
                     </div>
-                    <div class="pl-6 pt-4">
-                        <span class="flex font-th pb-1">ยืนยันรหัสผ่าน</span>
-                        <input v-model="form.confirmPassword" type="password" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกรหัสผ่านอีกครั้ง">
-                    </div>
+                    
                     <div class="pl-6 pt-4">
                         <span class="flex font-th pb-1">ตำแหน่ง</span>
-                        <input v-model="form.position" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกตำแหน่งของคุณ">
+                        <input v-model="form.position" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกตำแหน่งของผู้ใช้">
                     </div>
                     <div class="pl-6 pt-4">
                         <span class="flex font-th pb-1">แผนก</span>
-                        <input v-model="form.department" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกแผนกของคุณ">
+                        <input v-model="form.department" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกแผนกของผู้ใช้">
+                    </div>
+                    <div class="font-eng pl-6 pt-4">
+                        <span class="flex pb-1">role</span>
+                        <select 
+                            v-model="form.role"
+                            class="p-2 w-11/12 rounded-md" name="" id="">
+                            <option v-for="(role, index) in roles" :value="role.name" :key="index">
+                                {{role.name}}
+                            </option>
+                        </select>
                     </div>
                     <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-12">ยืนยัน</button>
                 </form>
@@ -58,32 +70,65 @@ export default {
                 confirmPassword: "",
                 position: "",
                 department: "",
-            }
+                role:"user",
+            },
+            roles:[
+                {
+                    id: 1,
+                    name: "user",
+                },
+                {
+                    id: 2,
+                    name: "head",
+                },
+                {
+                    id: 3,
+                    name: "admin"
+                },
+            ]
         }
     },
     methods:{
         async submit(){
-            if( this.form.name !== "" &&
-                this.form.email !== "" &&
-                this.form.password !== "" &&
-                this.form.confirmPassword !== "" &&
-                this.form.position !== "" &&
-                this.form.department !== "" &&
-                this.form.password === this.form.confirmPassword){
-                    let newUser = {
-                        name:this.form.name,
-                        email:this.form.email,
-                        password:this.form.password,
-                        position:this.form.position,
-                        department:this.form.department
+            this.$fire({
+                title: 'เพิ่มผู้ใช้',
+                text: "คุณต้องการที่จะเพิ่มผู้ใช้ใช่ไหม?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
+            }).then((r) => {
+                if(r.value){
+                    if( this.form.name !== "" &&
+                        this.form.email !== "" &&
+                        this.form.password !== "" &&
+                        this.form.confirmPassword !== "" &&
+                        this.form.position !== "" &&
+                        this.form.department !== "" &&
+                        this.form.role !== "" &&
+                        this.form.password === this.form.confirmPassword){
+                            let newUser = {
+                                name:this.form.name,
+                                email:this.form.email,
+                                password:this.form.password,
+                                position:this.form.position,
+                                department:this.form.department,
+                                role:this.form.role
+                            }
+                            this.putData(newUser)
+                    }else{
+                        this.$swal("ข้อมูลไม่ถูกต้อง", "กรุณาลองอีกครั้ง", "error")
+                        this.clearForm()
                     }
-                    await AdminStore.dispatch('createUser',newUser)
-                    this.$swal("เพิ่มผู้ใช้สำเร็จ","ข้อมูลผู้ใช้ถูกต้อง", "success")
-                    this.$router.push('/user')
-            }else{
-                this.$swal("ข้อมูลไม่ถูกต้อง", "กรุณาลองอีกครั้ง", "error")
-                this.clearForm()
-            }
+                }
+            });
+        },
+        async putData(newUser){
+            await AdminStore.dispatch('createUser',newUser)
+            this.$swal("เพิ่มผู้ใช้สำเร็จ","ข้อมูลผู้ใช้ถูกต้อง", "success")
+            this.$router.push('/user')
         },
         clearForm() {
             this.form = {
@@ -91,6 +136,9 @@ export default {
                 email: "",
                 password: "",
                 confirmPassword: "",
+                position: "",
+                department: "",
+                role:'user',
             }
         },
         async backPage(){

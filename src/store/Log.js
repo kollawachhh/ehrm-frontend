@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import LogService from '@/services/LogService'
+import AuthUser from '@/store/AuthUser'
 
 Vue.use(Vuex)
 
@@ -27,7 +28,15 @@ export default new Vuex.Store({
         async fetchLogsByDate({ commit }, date) {
             let payload = await LogService.getLogsByDate(date);
             commit("fetch", payload)
-        }
+        },
+        async addTimeIn({ commit },payload){
+            let res = await LogService.addTimeIn(payload)
+            return res
+        },
+        async addTimeOut({ commit },payload){
+            let res = await LogService.addTimeOut(payload)
+            return res
+        },
     },
 
     modules: {

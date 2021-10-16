@@ -22,13 +22,13 @@
                     <div class="flex w-80 bg-white mb-6 pt-1 mx-auto rounded-md">
                         <span class="font-th pl-3 pr-2">เวลาเข้า</span>
                         <button 
-                            v-if="this.form.taskInNow === false"
+                            v-if="this.form.taskIn === '00:00'"
                             @click="setTaskInNow" 
                             class="font-th text-center text-white bg-primary px-5 py-3 rounded-md font-2xl border mx-5 my-5 font-bold">
                             ลงเวลาเข้างาน
                         </button>
                         <p 
-                            v-if="this.form.taskInNow === true"
+                            v-if="this.form.taskIn !== '00:00'"
                             class="font-th text-center w-3/6 text-primary text-3xl mx-3 py-2 rounded-md font-2xl my-5 font-bold">
                             {{this.form.taskIn}} น.
                         </p>
@@ -37,15 +37,15 @@
                     <div class="flex w-80 bg-white mb-6 pt-1 mx-auto rounded-md">
                         <span class="font-th pl-3">เวลาออก</span>
                         <button
-                            :disabled="!this.form.taskInNow"
-                            v-if="this.form.taskOutNow === false"
+                            :disabled="this.form.taskIn ==='00:00'"
+                            v-if="this.form.taskOut === '00:00'"
                             @click="setTaskOutNow"                            
                             class="font-th text-center text-white bg-primary px-4 py-3 rounded-md font-2xl border mx-5 my-5 font-bold"
                             v-bind:class="{'bg-gray-300':this.form.taskInNow === false}">
                             ลงเวลาออกงาน
                         </button>
                         <p
-                            v-if="this.form.taskOutNow === true"
+                            v-if="this.form.taskOut !== '00:00'"
                             class="font-th w-3/6 text-center text-primary text-3xl mx-3 py-2 rounded-md font-2xl my-5 font-bold">
                             {{this.form.taskOut}} น.
                         </p>
@@ -74,9 +74,11 @@ import Footer from '@/components/Footer.vue'
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import AuthUser from '@/store/AuthUser'
 import moment from 'moment'
+import LogStore from '@/store/Log'
 export default {
     data() {
         return {
+            times:[],
             form: {
                 taskIn: "00:00",
                 taskOut: "00:00",
@@ -93,7 +95,8 @@ export default {
         }
     },
 
-    created() {
+    async created() {
+        await this.filterUserData()
         this.user.name = AuthUser.getters.user.name;
         this.user.position = AuthUser.getters.user.position;
         this.user.department = AuthUser.getters.user.department;
@@ -108,15 +111,30 @@ export default {
         async submit(){
             this.$router.push('/task')
         },
-        setTaskInNow(){
+        async setTaskInNow(){
             this.form.taskInNow = true
             this.form.taskIn = moment().format('HH:mm')
+            let today = new Date();
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            let time = moment().format('HH:mm:ss')
+            let payload={
+                time: time,
+                date: date
+            }
+            await LogStore.dispatch("addTimeIn",payload)
         },
-        setTaskOutNow(){
+        async setTaskOutNow(){
             this.form.taskOutNow = true
             this.form.taskOut = moment().format('HH:mm')
             this.form.totalTime = moment.utc(moment(this.form.taskOut, "HH:mm").diff(moment(this.form.taskIn, "HH:mm"))).format("HH:mm")
-            console.log(moment.utc(moment(this.form.taskOut, "HH:mm").diff(moment(this.form.taskIn, "HH:mm"))).format("HH:mm"))
+            let today = new Date();
+            let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            let time = moment().format('HH:mm:ss')
+            let payload={
+                time: time,
+                date: date
+            }
+            await LogStore.dispatch("addTimeOut",payload)
         },
         clearForm() {
             this.form = {
@@ -133,6 +151,20 @@ export default {
                 return AuthUser.getters.isAuthen
             }
         },
+        async filterUserData(){
+            let logs = await LogStore.dispatch("getLogs")
+            logs.data.forEach(log => { 
+                if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
+                    this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")
+                    this.form.taskOut = moment(log.logout_time, "HH:mm:ss").format("HH:mm")
+                    this.form.totalTime = moment(log.total_hours, "HH:mm:ss").format("HH:mm")
+                    if(this.form.taskIn !== '00:00'){
+                        this.form.taskInNow = true
+                    }
+                }
+            });
+        },
+        
         async backPage(){
             this.$router.go(-1)
         },
