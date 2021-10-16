@@ -95,6 +95,75 @@ export default {
                 }
             }
         }
-
-    }
+    },
+    async getWaitingLeaves() {
+        try {
+            let url = `${api_endpoint}/api/leaves/waiting`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header)
+            return res
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+    async getWaitingLeavesById(id) {
+        try {
+            let url = `${api_endpoint}/api/leaves/waiting/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header)
+            return res
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+    async updateStatusLeave(id, status) {
+        try {
+            let url = `${api_endpoint}/api/leaves/waiting/update-status/${id}`;
+            let body = {
+                id: id, 
+                status: status
+            }
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, body, header)
+            return res
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
 }
