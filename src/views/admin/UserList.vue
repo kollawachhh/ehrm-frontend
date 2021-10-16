@@ -9,14 +9,9 @@
                 </div>
                 <div class=" bg-gray-300 rounded-b-md h-5/6 ">
                     <div class="flex w-11/12 h-7 mx-auto my-5">
-                        <select @change="fetchUser($event)" name="" id="" class="flex font-th w-3/4 bg-white px-3 mr-3 rounded-md">
-                            <option value="" disabled selected hidden>ค้นหาลูกค้าจากระบบ</option>
-                            <option v-for="(user, index) in searchList" :key="index" :value="user.id">{{user.id + " : " + user.name}}</option>
-                        </select>
-                        <a href="/userForm" class="px-3 w-1/4 py-1 font-th text-white bg-secondary rounded-md">เพิ่มผู้ใช้</a>
+                        <input v-model="searchUser" type="text" class="flex font-th w-full bg-white px-3 rounded-md" placeholder="ค้นหาผู้ใช้">
                     </div>
-                    <table class="mx-2 h-full">
-                        
+                    <table class="mx-2 h-5/6">
                         <thead class="w-full flex border-b-4 border-primary">
                             <tr class="flex font-th w-80 text-md">
                                 <th class="w-1/6 border-l-2 border-primary"><span class="mx-auto">ไอดี</span></th>
@@ -24,9 +19,9 @@
                                 <th class="w-3/6 border-l-2 border-r-2 border-primary"><span class="mx-auto">เข้าใช้ล่าสุด</span></th>
                             </tr>
                         </thead>
-                        <div class="flex w-80 h-full overflow-y-scroll">
-                            <tbody class="w-80 h-5/6 overflow-y-scroll">
-                                    <tr v-for="(user, index) in allUsers" :key="index" class="flex font-eng border-b-2 border-primary py-2 text-sm">
+                        <div class="flex w-80 h-5/6 pt-2 overflow-y-scroll">
+                            <tbody class="w-80 overflow-y-scroll">
+                                    <tr v-for="(user, index) in resultQuery" :key="index" class="flex font-eng border-b-2 border-primary py-2 text-sm">
                                         <button class="flex w-full" @click="getDetail(user.id)">
                                             <td class="text-center w-1/6">{{user.id}}</td>
                                             <td class="text-center w-2/6">{{user.name}}</td>
@@ -36,6 +31,10 @@
                             </tbody>
                         </div>
                     </table>
+                    <div class="flex">
+                        <a href="/userForm" class="py-1 px-3 mx-auto font-th text-white bg-primary rounded-md">เพิ่มผู้ใช้</a>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -57,6 +56,7 @@ export default {
     },
     data() {
         return {
+            searchUser: null,
             allUsers: [],
             searchList: [],
         }
@@ -84,6 +84,17 @@ export default {
             return moment(time).format("DD-MM-YYYY HH:mm:ss")
         },
     },
+    computed: {
+        resultQuery(){
+            if(this.searchUser){
+                return this.allUsers.filter((item)=>{
+                    return this.searchUser.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+                })
+                }else{
+                    return this.allUsers;
+            }
+        }
+  }
 }
 </script>
 
