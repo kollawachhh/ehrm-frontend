@@ -1,6 +1,9 @@
 import Axios from 'axios'
 import AuthService from '@/services/AuthService'
 
+const auth_key = "auth-ehrm"
+let auth = JSON.parse(localStorage.getItem(auth_key))
+const user = auth ? auth.user : ""
 const api_endpoint = process.env.VUE_APP_EHRM_ENDPOINT || "http://localhost:8000"
 
 export default {

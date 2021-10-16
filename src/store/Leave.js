@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import LeaveService from '@/services/LeaveService'
+import AuthUser from '@/store/AuthUser'
 
 Vue.use(Vuex)
 

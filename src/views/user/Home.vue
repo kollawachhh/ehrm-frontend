@@ -56,7 +56,8 @@ export default {
       if(AuthUser.getters.user != null){
         return AuthUser.getters.isAuthen
       }
-    }
+    },
+    
   }
 }
 </script>
