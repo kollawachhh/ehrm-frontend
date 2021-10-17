@@ -104,6 +104,16 @@ export default {
         }catch (e){
             
         }
+    },
+    async getLogsById(id) {
+        let url = `${api_endpoint}/api/logs/${id}`;
+        let headers = AuthService.getApiHeader();
+        try{
+            let res = await Axios.get(url, headers)
+            return res
+        }catch (e){
+
+        }
     }
   }
     
