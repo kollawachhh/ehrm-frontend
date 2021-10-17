@@ -31,20 +31,20 @@ export default {
                 type: type,
                 leave_dates: totalDate,
                 cause: reason,
-                status: status
             }
             let headers = AuthService.getApiHeader();
             let res = await Axios.post(url, body, headers)
             console.log(res)
-            if (res.status === 201) {
-                let leave = {
-                    leave: res.data
-                }
-                localStorage.setItem(auth_key, JSON.stringify(leave))
-                return res.data
-            } else {
-                console.log("NOT 200", res)
-            }
+            return res.data.status;
+            // if (res.status === 201) {
+            //     let leave = {
+            //         leave: res.data
+            //     }
+            //     localStorage.setItem(auth_key, JSON.stringify(leave))
+            //     return res.data
+            // } else {
+            //     console.log("NOT 200", res)
+            // }
         } catch (e) {
 
         }

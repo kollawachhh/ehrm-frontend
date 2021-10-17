@@ -107,10 +107,17 @@ export default {
             this.form.endDate !== "" &&
             this.form.totalDate !== 0) {
                 this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
-                await Leave.dispatch("leaves", this.form);
-                // this.clearForm();
-                this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
-                this.$router.push('/break')
+                let res = await Leave.dispatch("leaves", this.form);
+                // 
+                if (res == "error"){
+                    this.$swal("ทำรายการไม่สำเร็จ", `วันลาไม่เพียงพอ`, "warning")
+                    this.clearForm();
+                }
+                else if (res == "success"){
+                    this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
+                    this.$router.push('/break')
+                }
+                
             } else {
                 this.$swal("ทำรายการไม่สำเร็จ", `กรุณากรอกข้อมูลให้ครบถ้วน`, "warning")
             }
