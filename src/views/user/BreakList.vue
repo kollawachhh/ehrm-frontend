@@ -103,7 +103,7 @@ export default {
             } else {
                 await LeaveStore.dispatch('fetchLeaves')
             }
-            this.leaveList = LeaveStore.getters.leaves
+            this.leaveList = LeaveStore.getters.leaves.data
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";

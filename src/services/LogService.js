@@ -11,9 +11,31 @@ export default {
             let res = await Axios.get(url, headers)
             return res
         }catch (e){
-            console.log("can't get logs");
+
         }
 
+    },
+    async getLogsByDate(date) {
+        let url = `${api_endpoint}/api/logs/by-date/${date}`;
+        console.log(date);
+        let headers = AuthService.getApiHeader();
+        try {
+            let res = await Axios.get(url, headers)
+            if(res.status === 200) {
+              return {
+                success: true,
+                data: res.data
+              }
+            } else {
+              console.error(res)
+              return {
+                success: false,
+                message: "Unknown status code: " + res.status
+              }
+            }
+        } catch(e) {
+            console.log("kuy")
+        }
     },
     async addTimeIn(payload) {
         let url = api_endpoint + "/api/user/start-work"
@@ -37,18 +59,7 @@ export default {
             }
           }
         } catch(e) {
-          if(e.response.status === 403) {
-            console.error(e.response.data.message)
-            return {
-              success: false,
-              message: e.response.data.message
-            }
-          } else {
-            return {
-              success: false,
-              message: "Unknown error: " + e.response.data
-            }
-          }
+          
         }
       },
       async addTimeOut(payload) {
@@ -75,18 +86,7 @@ export default {
             }
           }
         } catch(e) {
-          if(e.response.status === 403) {
-            console.error(e.response.data.message)
-            return {
-              success: false,
-              message: e.response.data.message
-            }
-          } else {
-            return {
-              success: false,
-              message: "Unknown error: " + e.response.data
-            }
-          }
+          
         }
       },
       async getTimeById(id) {
@@ -99,7 +99,7 @@ export default {
       },
       async getAllLogsToday(){
         try{
-            let res = await Axios.get(`${api_endpoint}/api/logs`)
+            let res = await Axios.get(url, headers)
             return res
         }catch (e){
             
