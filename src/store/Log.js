@@ -36,6 +36,10 @@ export default new Vuex.Store({
             let res = await LogService.addTimeOut(payload)
             return res
         },
+        async fetchLogsById({ commit }, id) {
+            let payload = await LogService.getLogsById(id);
+            commit("fetch", payload)
+        }
     },
 
     modules: {
