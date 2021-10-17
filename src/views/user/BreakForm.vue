@@ -124,7 +124,8 @@ export default {
                 startDate: "",
                 endDate: "",
                 total: "",
-                status: ""
+                status: "",
+                id: "",
             }
         },
         isAuthen() {
