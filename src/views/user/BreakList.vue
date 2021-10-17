@@ -11,7 +11,18 @@
                     </select>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6 py-3">
-                    <div class="h-full mt-0 overflow-scroll">
+                    <div class="h-full mt-0 overflow-scroll" v-if="this.role === 'admin'">
+                        <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
+                            <span class="flex font-th pl-4">{{ leave.type }}</span>
+                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
+                                <span class="flex mb-3">ชื่อพนักงาน : {{leave.user.name}}</span>
+                                <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
+                                <span class="flex mb-3">ระยะเวลา : {{ leave.leave_dates }} วัน</span>
+                                <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-full mt-0 overflow-scroll" v-if="this.role === ''">
                         <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
@@ -20,9 +31,9 @@
                                 <span class="flex mb-3">วันที่ <p class="ml-9 mr-2">:</p> {{ leave.date_start }} - {{ leave.date_end }}</span>
                                 <span class="flex">
                                     สถานะ <p class="ml-5 mr-2">:</p>
-                                    <span v-if="status === ''" class="text-emerald-500">ได้รับการยืนยัน</span>
-                                    <span v-if="status === 'pending'" class="text-blue-500">รอการยืนยัน</span>
-                                    <span v-if="status === 'cancel'" class="text-red-500">ปฏิเสธการยืนยัน</span>
+                                    <span v-if="status === 'comfirmed'" class="text-emerald-500">ได้รับการยืนยัน</span>
+                                    <span v-if="status === 'waiting'" class="text-blue-500">รอการยืนยัน</span>
+                                    <span v-if="status === 'cancelled'" class="text-red-500">ปฏิเสธการยืนยัน</span>
                                 </span>
                             </div>
                         </div>
@@ -54,7 +65,7 @@ export default {
                 year: "",
             },
             leaveList: [],
-            role:'',
+            role: AuthUser.getters.user.role,
             months:[
                 { id: '1', name: 'January' },
                 { id: '2', name: 'Febuary' },
@@ -81,16 +92,18 @@ export default {
     methods:{
         isAuthen() {
             if(AuthUser.getters.user != null){
-                if(AuthUser.getters.user.is_admin === 1){
-                    this.role = 'Admin'
-                }
                 return AuthUser.getters.isAuthen
             }
         },
         async fetchLeaves() {
-            await LeaveStore.dispatch('fetchLeaves')
+            if (this.role === "admin") {
+                const current = new Date();
+                const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
+                await LeaveStore.dispatch('fetchLeavesByDate', date)
+            } else {
+                await LeaveStore.dispatch('fetchLeaves')
+            }
             this.leaveList = LeaveStore.getters.leaves.data
-            console.log(this.leaveList)
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";

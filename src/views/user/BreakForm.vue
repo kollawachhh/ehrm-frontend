@@ -14,7 +14,7 @@
                         <select v-model="form.type" name="type" id="types" class="flex mr-5 p-1 w-11/12 bg-white font-th">
                             <option value="" disabled selected hidden>เลือกประเภท</option>
                             <option 
-                                v-for="(type, index) in types" :key="index" :value='type.name' >
+                                v-for="(type, index) in types" :key="index" :value='type.id' >
                             {{ type.name }}
                             </option>
                         </select>
@@ -73,6 +73,7 @@ export default {
                 startDate: "",
                 endDate: "",
                 totalDate: 0,
+                status: ""
             },
             disableDatePicker: true,
             role:'',
@@ -101,12 +102,13 @@ export default {
             return date < this.form.startDate;
         },
         async submit(){
-            if (this.form.type !== null && 
-            this.form.reason !== null &&
-            this.form.startDate !== null &&
-            this.form.endDate !== null &&
+            if (this.form.type !== "" && 
+            this.form.reason !== "" &&
+            this.form.startDate !== "" &&
+            this.form.endDate !== "" &&
             this.form.totalDate !== 0) {
                 this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
+                console.log(this.form.status)
                 await Leave.dispatch("leaves", this.form);
                 this.clearForm();
                 this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
@@ -122,6 +124,7 @@ export default {
                 startDate: "",
                 endDate: "",
                 total: "",
+                status: "",
                 id: "",
             }
         },
