@@ -89,22 +89,6 @@ export default {
           
         }
       },
-      async getTimeById(id) {
-        try {
-            let res = await Axios.get(`${api_endpoint}/api/logs/${id}`)
-            return res.data
-        } catch(e) {
-            console.log("can't get time");
-        }
-      },
-      async getAllLogsToday(){
-        try{
-            let res = await Axios.get(url, headers)
-            return res
-        }catch (e){
-            
-        }
-    },
     async getLogsById(id) {
         let url = `${api_endpoint}/api/logs/${id}`;
         let headers = AuthService.getApiHeader();
