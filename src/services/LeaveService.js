@@ -33,7 +33,7 @@ export default {
     getUser() {
         return user
     },
-    async addLeaves({ startDate, endDate, type, totalDate, reason, status }) {
+    async addLeaves({ startDate, endDate, type, totalDate, reason }) {
         console.log("worked")
         try {
             let url = `${api_endpoint}/api/user/create-leave`

@@ -73,7 +73,6 @@ export default {
                 startDate: "",
                 endDate: "",
                 totalDate: 0,
-                status: ""
             },
             disableDatePicker: true,
             role:'',
@@ -108,9 +107,8 @@ export default {
             this.form.endDate !== "" &&
             this.form.totalDate !== 0) {
                 this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
-                console.log(this.form.status)
                 await Leave.dispatch("leaves", this.form);
-                this.clearForm();
+                // this.clearForm();
                 this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
                 this.$router.push('/break')
             } else {

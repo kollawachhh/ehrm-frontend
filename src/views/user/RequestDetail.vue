@@ -107,7 +107,7 @@ export default {
                         if(r.value){
                             let status = {
                                 id: this.request.id,
-                                status: 'canceled'
+                                status: 'cancelled'
                             }
                             this.putData(status)
                             this.$swal("ทำการปฏิเสธคำขอเรียบร้อย!", ``, "success")
