@@ -23,7 +23,7 @@ export default new Vuex.Store({
     actions: {
         async fetchLogs({ commit }) {
             let payload = await LogService.getLogs(AuthUser.getters.user.id);
-            commit("fetch", payload.data)
+            commit("fetch", payload)
         },
         async getLogs({ commit }){
             let res = await LogService.getLogs()

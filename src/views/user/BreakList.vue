@@ -89,7 +89,8 @@ export default {
         },
         async fetchLeaves() {
             await LeaveStore.dispatch('fetchLeaves')
-            this.leaveList = LeaveStore.getters.leaves
+            this.leaveList = LeaveStore.getters.leaves.data
+            console.log(this.leaveList)
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";
