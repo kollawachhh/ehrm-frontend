@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import LogService from '@/services/LogService'
-import AuthUser from '@/store/AuthUser'
 
 Vue.use(Vuex)
 
