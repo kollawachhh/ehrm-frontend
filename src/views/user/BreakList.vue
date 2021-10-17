@@ -5,8 +5,9 @@
             <div class="mx-auto mt-6 w-10/12">
                 <div class="flex bg-primary py-5 rounded-t-md">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
-                    <span class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month) }} - {{ this.date.year }}</span>
-                    <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
+                    <span v-if="this.role === 'admin'" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span>
+                    <span v-if="this.role !== 'admin'" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
+                    <select v-if="this.role !== 'admin'" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
                     </select>
                 </div>
@@ -18,7 +19,13 @@
                                 <span class="flex mb-3">ชื่อพนักงาน : {{leave.user.name}}</span>
                                 <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
                                 <span class="flex mb-3">ระยะเวลา : {{ leave.leave_dates }} วัน</span>
-                                <span class="flex">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex mb-3">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex">
+                                    สถานะ <p class="ml-1 mr-1">:</p>
+                                    <span v-if="leave.status === 'confirmed'" class="text-emerald-500">ได้รับการยืนยัน</span>
+                                    <span v-if="leave.status === 'waiting'" class="text-blue-500">รอการยืนยัน</span>
+                                    <span v-if="leave.status === 'cancelled'" class="text-red-500">ปฏิเสธการยืนยัน</span>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -64,6 +71,7 @@ export default {
             date: {
                 month: "",
                 year: "",
+                day: ""
             },
             leaveList: [],
             role: AuthUser.getters.user.role,
@@ -97,10 +105,10 @@ export default {
             }
         },
         async fetchLeaves() {
+            const current = new Date();
+            const today = current.toLocaleDateString('en-CA');
             if (this.role === "admin") {
-                const current = new Date();
-                const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
-                await LeaveStore.dispatch('fetchLeavesByDate', date)
+                await LeaveStore.dispatch('fetchLeavesByDate', today)
             } else {
                 await LeaveStore.dispatch('fetchLeaves')
             }
@@ -153,6 +161,7 @@ export default {
         let today = new Date();
         this.date.month = today.toLocaleString('default', { month: 'long' })
         this.date.year = today.getFullYear()
+        this.date.day = today.toLocaleDateString('en-CA');
         this.fetchLeaves()
     },
     computed: {
