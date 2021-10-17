@@ -39,6 +39,7 @@ export default new Vuex.Store({
         async fetchLogsById({ commit }, id) {
             let payload = await LogService.getLogsById(id);
             commit("fetch", payload)
+            return payload.data
         }
     },
 
