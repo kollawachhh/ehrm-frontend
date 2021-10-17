@@ -6,7 +6,7 @@
                 <div class="flex bg-primary py-5 rounded-t-md">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
                     <span v-if="this.role === 'admin'" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span>
-                    <span v-if="this.role !== 'admin'" class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <span v-if="this.role !== 'admin'" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
                     <select v-if="this.role !== 'admin'" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
                     </select>
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="h-full mt-0 overflow-scroll" v-if="this.role !== 'admin'">
-                        <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
+                        <div class="pb-2" v-for="(leave, index) in resultQuery" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
                                 <span class="flex mb-3">เหตุผล <p class="ml-5 mr-2">:</p> {{ leave.cause }}</span>
@@ -58,6 +58,7 @@ import Footer from '@/components/Footer.vue'
 import AuthUser from '@/store/AuthUser'
 import LeaveStore from '@/store/Leave'
 import Dropdown from 'vue-simple-search-dropdown';
+import moment from 'moment'
 export default {
     name:'BreakList',
     components: {
@@ -126,7 +127,35 @@ export default {
         },
         async backPage(){
             this.$router.go(-1)
-        },   
+        },
+        getMonthTH(month){
+            switch(month){
+                case 'January':
+                    return 'มกราคม'
+                case 'Febuary':
+                    return 'กุมภาพันธ์'
+                case 'March':
+                    return 'มีนาคม'
+                case 'April':
+                    return 'เมษายน'
+                case 'May':
+                    return 'พฤษภาคม'
+                case 'June':
+                    return 'มิถุนายน'
+                case 'July':
+                    return 'กรกฏาคม'
+                case 'August':
+                    return 'สิงหาคม'
+                case 'September':
+                    return 'กันยายน'
+                case 'October':
+                    return 'ตุลาคม'
+                case 'November':
+                    return 'พฤศจิกายน'
+                case 'December':
+                    return 'ธันวาคม'
+            }   
+        }   
     },
     created() {
         let today = new Date();
@@ -135,6 +164,17 @@ export default {
         this.date.day = today.toLocaleDateString('en-CA');
         this.fetchLeaves()
     },
+    computed: {
+        resultQuery(){
+            if(this.date.month){
+                return this.leaveList.filter((item)=>{
+                    return this.date.month.toLowerCase().split(' ').every(v => (moment(item.created_at).format('MMMM')).toLowerCase().includes(v))
+                })
+                }else{
+                    return this.leaveList;
+            }
+        }
+    }
 }
 </script>
 

@@ -7,7 +7,7 @@
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
                     <!-- <span v-if="this.role === 'Admin'" class="flex font-th text-white text-xl mx-auto">รายการลงงาน {{ this.date.day  }}</span>
                     <span v-else class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span> -->
-                    <span class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span>
+                    <span class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month) }} - {{ this.date.year }}</span>
                     <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
                     </select>
@@ -23,9 +23,9 @@
                             </tr>
                         </thead>
                         <div class="flex h-full w-80 overflow-y-scroll">
-                            <tbody class="w-80" v-bind:class="{'h-5/6':role === 'Admin'}">
+                            <tbody class="w-80" v-bind:class="{'h-5/6':role === 'admin'}">
                                 <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm"
-                                    v-for="(log, index) in logList.data" :key="index">
+                                    v-for="(log, index) in resultQuery" :key="index">
                                     <td class="text-center w-1/4">{{ log.date }}</td>
                                     <td class="text-center w-1/4">{{ log.login_time }}</td>
                                     <td class="text-center w-1/4">{{ log.logout_time }}</td>
@@ -46,6 +46,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import AuthUser from '@/store/AuthUser'
 import LogStore from '@/store/Log'
+import moment from 'moment'
 
 export default {
 
@@ -62,7 +63,7 @@ export default {
                 day: ""
             },
             logList: [],
-            role: '',
+            role: AuthUser.getters.user.role,
             months:[
                 { id: '1', name: 'January' },
                 { id: '2', name: 'Febuary' },
@@ -90,12 +91,7 @@ export default {
         this.date.month = today.toLocaleString('default', { month: 'long' })
         this.date.year = today.getFullYear();
         this.date.day = today.toLocaleDateString('en-CA');
-        if (AuthUser.getters.user != null){
-            if(AuthUser.getters.user.role === "admin"){
-                this.role = 'Admin'
-            }
-        }
-        if (this.role === 'Admin'){
+        if (this.role === 'admin'){
             await this.fetchLogsByDate()
         } else {
             await this.fetchLogs()
@@ -105,15 +101,12 @@ export default {
     methods:{
         isAuthen() {
             if(AuthUser.getters.user != null){
-                if(AuthUser.getters.user.is_admin === 1){
-                    this.role = 'Admin'
-                }
             return AuthUser.getters.isAuthen
             }
         },
         async fetchLogs() {
             await LogStore.dispatch('fetchLogs')
-            this.logList = LogStore.getters.logs
+            this.logList = LogStore.getters.logs.data
         },
         async fetchLogsByDate() {
             let date = new Date().toLocaleDateString('en-CA');
@@ -123,6 +116,45 @@ export default {
         async backPage(){
             this.$router.go(-1)
         },
+        getMonthTH(month){
+            switch(month){
+                case 'January':
+                    return 'มกราคม'
+                case 'Febuary':
+                    return 'กุมภาพันธ์'
+                case 'March':
+                    return 'มีนาคม'
+                case 'April':
+                    return 'เมษายน'
+                case 'May':
+                    return 'พฤษภาคม'
+                case 'June':
+                    return 'มิถุนายน'
+                case 'July':
+                    return 'กรกฏาคม'
+                case 'August':
+                    return 'สิงหาคม'
+                case 'September':
+                    return 'กันยายน'
+                case 'October':
+                    return 'ตุลาคม'
+                case 'November':
+                    return 'พฤศจิกายน'
+                case 'December':
+                    return 'ธันวาคม'
+            }   
+        }
+    },
+    computed: {
+        resultQuery(){
+            if(this.date.month){
+                return this.logList.filter((item)=>{
+                    return this.date.month.toLowerCase().split(' ').every(v => (moment(item.created_at).format('MMMM')).toLowerCase().includes(v))
+                })
+                }else{
+                    return this.logList;
+            }
+        }
     }
 }
 </script>
