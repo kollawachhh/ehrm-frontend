@@ -1,4 +1,9 @@
-# ehrm-frontend
+# EHRM (Frontend)
+
+## Tech stack
+   1. vue.js 4.5.13
+   2. npm 6.14.11
+
 
 ## Desciption
 
@@ -80,6 +85,9 @@ users :
         email : user3@it.com
         password : password
 ```
+
+## backend
+https://github.com/nirattasai/ehrm-backend
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
