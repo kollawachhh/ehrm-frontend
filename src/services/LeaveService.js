@@ -61,13 +61,36 @@ export default {
         }
     },
     async getLeavesByDate(date) {
-        let url = `${api_endpoint}/api/leaves/by-date/${date}`
+        let url = `${api_endpoint}/api/leaves/by-date/${date}`;
         let headers = AuthService.getApiHeader();
         try {
             let res = await Axios.get(url, headers)
+            console.log(res)
             return res.data
         } catch (e) {
 
+        }
+    },
+    async getLeavesById(id) {
+        try {
+            let url = `${api_endpoint}/api/leaves/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header)
+            return res
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
         }
     },
     async getWaitingLeaves() {

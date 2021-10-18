@@ -35,7 +35,7 @@ export default new Vuex.Store({
             commit("fetch", payload.data)
         },
         async leaves({ commit }, { startDate, endDate, type, totalDate, reason }) {
-            let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason})
+            let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason })
             console.log(res)
                 // if (res.success) {
             commit("add", res)
@@ -48,6 +48,7 @@ export default new Vuex.Store({
         },
         async fetchLeavesByDate({ commit }, date) {
             let payload = await LeaveService.getLeavesByDate(date);
+            console.log(payload)
             commit("fetch", payload)
         },
         async fetchWaitingLeaves({ commit }) {
@@ -57,6 +58,10 @@ export default new Vuex.Store({
         async fetchWaitingLeavesById({ commit }, id) {
             let payload = await LeaveService.getWaitingLeavesById(id);
             commit("fetch", payload.data[0])
+        },
+        async fetchLeavesById({ commit }, id) {
+            let payload = await LeaveService.getLeavesById(id);
+            commit("fetch", payload)
         },
         async updateStatusLeave({ commit }, { id, status }) {
             let payload = await LeaveService.updateStatusLeave(id, status);
