@@ -10,8 +10,17 @@
             <div class="bg-gray-300 rounded-b-md pb-4">
                 <form @submit.prevent="submit">
                     <div class="pl-6 pt-5">
-                        <span class="flex font-th pb-2">ประเภทการลางาน</span>
-                        <select v-model="form.type" name="type" id="types" class="flex mr-5 p-1 w-11/12 bg-white font-th">
+                        <span class="flex font-th pb-2">
+                            ประเภทการลางาน
+                            <span v-if="this.errors === 'fields required' || this.errors === 'type required'" 
+                                  class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <select 
+                            v-model="form.type" 
+                            name="type" 
+                            id="types" 
+                            class="flex mr-5 p-1 w-11/12 bg-white font-th"
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'type required'}">
                             <option value="" disabled selected hidden>เลือกประเภท</option>
                             <option 
                                 v-for="(type, index) in types" :key="index" :value='type.id' >
@@ -20,27 +29,59 @@
                         </select>
                     </div>
                     <div class="pl-6 pt-5">
-                        <span class="flex font-th pb-2">เหตุผลการลางาน</span>
-                        <textarea v-model="form.reason" name="" id="" cols="30" rows="5" placeholder="เขียนเหตุผลการลางาน" class="font-th w-11/12 p-2 text-xs"></textarea>
+                        <span class="flex font-th pb-2">
+                            เหตุผลการลางาน
+                            <span v-if="this.errors === 'fields required' || this.errors === 'reason required'" 
+                                  class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <textarea 
+                            v-model="form.reason" 
+                            name="" 
+                            id="" 
+                            cols="30" 
+                            rows="5" 
+                            placeholder="เขียนเหตุผลการลางาน" 
+                            class="font-th w-11/12 p-2 text-xs"
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'reason required'}"></textarea>
                     </div>
                     <div class="pl-6 pt-5">
-                        <span class="flex font-th pb-2">ตั้งแต่วันที่</span>
-                        <date-picker v-model="form.startDate" type="date" 
-                        :default-value="new Date()" :disabled-date="notBeforeToday" @change="change"
-                         placeholder='วันที่ลางาน' 
-                        :clearable=false 
-                        class="center bg-white w-11/12 mb-2 font-th"></date-picker>
-                        <span class="flex font-th pb-2">ถึง</span>
-                        <date-picker v-if="this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
-                        :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
-                        value-type="format" placeholder='วันที่ลางาน' 
-                        :clearable=false disabled
-                        class="center font-th bg-white w-11/12 mb-2"></date-picker>
-                        <date-picker v-if="!this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
-                        :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
-                        value-type="format" placeholder='วันที่ลางาน' 
-                        :clearable=false
-                        class="center font-th bg-white w-11/12 mb-2"></date-picker>
+                        <span class="flex font-th pb-2">
+                            ตั้งแต่วันที่
+                            <span v-if="this.errors === 'fields required' || this.errors === 'startDate required'" 
+                                  class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <date-picker 
+                            v-model="form.startDate" 
+                            type="date" 
+                            :default-value="new Date()" :disabled-date="notBeforeToday" @change="change"
+                            placeholder='วันที่ลางาน' 
+                            :clearable=false 
+                            class="center bg-white w-11/12 mb-2 font-th"
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'startDate required'}"></date-picker>
+                        <span class="flex font-th pb-2">
+                            ถึง
+                            <span v-if="this.errors === 'fields required' || this.errors === 'endDate required'" 
+                                  class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <date-picker 
+                            v-if="this.disableDatePicker" 
+                            @change="getTotalDate" 
+                            v-model="form.endDate" 
+                            type="date" 
+                            :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
+                            value-type="format" placeholder='วันที่ลางาน' 
+                            :clearable=false disabled
+                            class="center font-th bg-white w-11/12 mb-2"
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'endDate required'}"></date-picker>
+                        <date-picker 
+                            v-if="!this.disableDatePicker" 
+                            @change="getTotalDate" 
+                            v-model="form.endDate" type="date" 
+                            :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
+                            value-type="format" placeholder='วันที่ลางาน' 
+                            :clearable=false
+                            class="center font-th bg-white w-11/12 mb-2"
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'endDate required'}"></date-picker>
                         <br>
                         <span class="font-th">เป็นเวลา {{form.totalDate}} วัน</span>
                     </div>
@@ -82,6 +123,7 @@ export default {
                     {name: "ลาพักร้อน", id: "vacation_leave"},
                     {name: "ลาคลอด", id: "maternity_leave"}
             ],
+            errors: '',
         }
     },
     mounted(){
@@ -101,25 +143,63 @@ export default {
             return date < this.form.startDate;
         },
         async submit(){
-            if (this.form.type !== "" && 
-            this.form.reason !== "" &&
-            this.form.startDate !== "" &&
-            this.form.endDate !== "" &&
-            this.form.totalDate !== 0) {
-                this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
-                let res = await Leave.dispatch("leaves", this.form);
-                // 
-                if (res == "error"){
-                    this.$swal("ทำรายการไม่สำเร็จ", `วันลาไม่เพียงพอ`, "warning")
-                    this.clearForm();
+            this.$fire({
+                title: 'ลงบันทึกลางาน',
+                text: "คุณต้องการลางานใช่ไหม?",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ไม่',
+            }).then((r) => {
+                if(r.value){
+                    if (this.form.type !== "" && 
+                        this.form.reason !== "" &&
+                        this.form.startDate !== "" &&
+                        this.form.endDate !== "" &&
+                        this.form.totalDate !== 0) {
+                        this.form.startDate = moment(this.form.startDate).format("YYYY-MM-DD")
+                        this.putData();
+                            
+                    } else {
+                        if (this.form.type === "" && 
+                            this.form.reason === "" &&
+                            this.form.startDate === "" &&
+                            this.form.endDate === ""){
+                                this.errors = 'fields required'
+                                this.$swal("ข้อมูลผิดพลาด", `กรุณากรอกข้อมูล`, "warning")
+                        }
+                        else if(this.form.type === ""){
+                            this.errors = 'type required'
+                            this.$swal("ข้อมูลผิดพลาด", `กรุณาเลือกประเภท`, "warning")
+                        }
+                        else if(this.form.reason === ""){
+                            this.errors = 'reason required'
+                            this.$swal("ข้อมูลผิดพลาด", `กรุณาใส่เหตุผล`, "warning")
+                        }
+                        else if(this.form.startDate === ""){
+                            this.errors = 'startDate required'
+                            this.$swal("ข้อมูลผิดพลาด", `กรุณาเลือกวันเริ่ม`, "warning")
+                        }
+                        else if(this.form.endDate === ""){
+                            this.errors = 'endDate required'
+                            this.$swal("ข้อมูลผิดพลาด", `กรุณาเลือกวันสุดท้าย`, "warning")
+                        }
+                    }
                 }
-                else if (res == "success"){
-                    this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
-                    this.$router.push('/break')
-                }
-                
-            } else {
-                this.$swal("ทำรายการไม่สำเร็จ", `กรุณากรอกข้อมูลให้ครบถ้วน`, "warning")
+            });
+            
+        },
+        async putData(){
+            let res = await Leave.dispatch("leaves", this.form);
+            if (res == "error"){
+                this.errors = 'email or password is required.'
+                this.$swal("ทำรายการไม่สำเร็จ", `วันลาไม่เพียงพอ`, "warning")
+                this.clearForm();
+            }
+            else if (res == "success"){
+                this.$swal("ทำรายการสำเร็จ", `คุณได้ทำการลางานเรียบร้อย`, "success")
+                this.$router.push('/break')
             }
         },
         clearForm() {
