@@ -7,40 +7,55 @@
                 <button @click="backPage" class="font-th ml-5 text-xl px-2 mr-16 text-white">&#60;</button>
                 <span class="font-th text-white ml-7 text-xl">เพิ่มผู้ใช้</span>
             </div>
-            <div class="bg-gray-300 rounded-b-md pb-3">
+            <div class="bg-gray-300 rounded-b-md pb-1">
                 <form @submit.prevent="submit">
                     <div class="pl-6 pt-5" >
                         <span class="flex font-th pb-1">ชื่อ</span>
                         <input v-model="form.name" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกชื่อ">
-                        <p class="text-red-500" v-if="!$v.form.name.required">name is required</p>
-                        <!-- <p class="text-red-500" v-if="!$v.form.name.minLength">name must have at least {{ $v.form.name.$params.minLength.min }} letters</p> -->
+                        <p class="text-red-500" v-if="!$v.form.name.minLength">name must have at least {{ $v.form.name.$params.minLength.min }} letters</p>
+                        <div v-if="errors">
+                            <p class="text-red-500" v-if="!$v.form.name.required">name is required</p>
+                        </div>
+                        
                     </div>
                     <div class="pl-6 py-4">
                         <span class="flex font-th pb-1">อีเมลล์</span>
                         <input v-model="form.email" type="email" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกอีเมลล์ผู้ใช้">
+                        <div v-if="errors">
+                            <p class="text-red-500" v-if="!$v.form.email.required">email is required</p>
+                        </div>
                     </div>
                     <span class="font-th ml-6">รหัสผ่าน</span>
-                    <div class="flex w-11/12">    
+                    <div class="flex w-11/12">
                         <div class="pl-6">
                             <input v-model="form.password" type="password" class="p-2 font-th w-full rounded-md" placeholder="กรอกรหัสผ่าน">
-                            <!-- <p class="text-red-500" v-if="!$v.form.password.required">password is required</p>
-                            <p class="text-red-500" v-if="!$v.form.password.minLength">password must have at least {{ $v.form.name.$params.minLength.min }} letters</p> -->
                         </div>
                         <div class="ml-5">
                             <input v-model="form.confirmPassword" type="password" class="p-2 font-th w-full rounded-md" placeholder="ยืนยันรหัสผ่าน">
-                            <!-- <p class="text-red-500" v-if="!$v.form.confirmPassword.sameAsPassword">Passwords must be identical</p> -->
                         </div>
+                        
+                    </div>
+                    <div v-if="errors" class="ml-6">
+                        <p class="text-red-500" v-if="!$v.form.password.required">password is required</p>
+                        <p class="text-red-500" v-if="!$v.form.password.minLength">password must have at least {{ $v.form.password.$params.minLength.min }} letters</p>
+                    </div>
+                    <div class="ml-6">
+                        <p class="text-red-500" v-if="!$v.form.confirmPassword.sameAsPassword">Passwords must be identical</p>
                     </div>
                     
                     <div class="pl-6 pt-4">
                         <span class="flex font-th pb-1">ตำแหน่ง</span>
                         <input v-model="form.position" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกตำแหน่งของผู้ใช้">
-                        <!-- <p class="text-red-500" v-if="!$v.form.position.required">position is required</p> -->
+                        <div v-if="errors">
+                            <p class="text-red-500" v-if="!$v.form.position.required">position is required</p>
+                        </div>
                     </div>
                     <div class="pl-6 pt-4">
                         <span class="flex font-th pb-1">แผนก</span>
                         <input v-model="form.department" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกแผนกของผู้ใช้">
-                        <!-- <p class="text-red-500" v-if="!$v.form.department.required">department is required</p> -->
+                        <div v-if="errors">
+                            <p class="text-red-500" v-if="!$v.form.department.required">department is required</p>
+                        </div>
                     </div>
                     <div class="font-eng pl-6 pt-4">
                         <span class="flex pb-1">role</span>
@@ -71,6 +86,7 @@ import { required, minLength, sameAs} from 'vuelidate/lib/validators'
 export default {
     data() {
         return {
+            errors: false,
             form: {
                 name: "",
                 email: "",
@@ -153,6 +169,7 @@ export default {
                             this.clearForm()
                     }
                     else{
+                        this.errors = !this.$v.form.$anyError;
                         this.$swal("ข้อมูลไม่ถูกต้อง", "กรุณาลองอีกครั้ง", "error")
                     }
                 }
