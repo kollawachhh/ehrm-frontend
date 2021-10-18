@@ -18,7 +18,8 @@
                     <table class="mx-auto h-full mt-1 ">
                         <thead class="flex border-b-4 border-primary">
                             <tr class="font-th w-80 text-md">
-                                <th class="w-20 border-l-2 border-primary"><span class="mx-auto">วันที่</span></th>
+                                <th v-if="this.role != 'admin' || this.selectedUser != null" class="w-20 border-l-2 border-primary"><span class="mx-auto">วันที่</span></th>
+                                <th v-if="this.role === 'admin' && this.selectedUser == null" class="w-20 border-l-2 border-primary"><span class="mx-auto">ชื่อ</span></th>
                                 <th class="w-20 border-l-2 border-primary"><span class="mx-auto">เวลาเข้า</span></th>
                                 <th class="w-20 border-l-2 border-primary"><span class="mx-auto">เวลาออก</span></th>
                                 <th class="w-20 border-l-2 border-r-2 border-primary"><span class="mx-auto">เวลารวม</span></th>
@@ -28,7 +29,8 @@
                             <tbody class="w-80" v-bind:class="{'h-5/6':role === 'admin'}">
                                 <tr class="flex font-eng border-b-2 mt-1 pb-1 border-primary text-sm"
                                     v-for="(log, index) in resultQuery" :key="index">
-                                    <td class="text-center w-1/4">{{ log.date }}</td>
+                                    <td v-if="role != 'admin' || selectedUser != null" class="text-center w-1/4">{{ log.date }}</td>
+                                    <td v-if="role === 'admin' && selectedUser == null" class="text-center w-1/4">{{ log.user.name }}</td>
                                     <td class="text-center w-1/4">{{ log.login_time }}</td>
                                     <td class="text-center w-1/4">{{ log.logout_time }}</td>
                                     <td class="text-center w-1/4">{{ log.total_hours }}<span class="font-th"> ชม.</span></td>
