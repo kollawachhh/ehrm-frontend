@@ -12,7 +12,7 @@
                     <div class="h-full overflow-scroll">
                         <div class="w-5/6 mx-auto mt-3">
                             <span class="flex font-th pb-1"> รูปโปรไฟล์</span>
-                            <!-- <img :src="image" alt=""> -->
+                            <img :src="this.form.image" alt="">
                             <input @change="handleImage" class="w-full font-eng mx-auto" type="file" accept="image/*">
                         </div>
                         <div class="pl-6 pt-5">
@@ -86,7 +86,7 @@
                             </span>
                             <input 
                                 v-model="form.department" 
-                                type="text" 
+                                ty581pe="text" 
                                 class="p-2 font-th w-11/12 rounded-md" 
                                 v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'department required'}"
                                 placeholder="กรอกแผนกของผู้ใช้">
@@ -244,20 +244,16 @@ export default {
             this.$router.go(-1)
         },
         handleImage(e){
-            const selectedImage = e.target.files[0];
-            this.createBase64Image(selectedImage);
-        },
-        createBase64Image(fileObject){
-            const reader = new FileReader();
+            const selectedImage = e.target.files[0]
+            const reader = new FileReader()
+
             reader.onloadend = () => {
-                let x = reader.result
-                console.log(x);
-                // console.log(e.target.result);
-                // this.form.image = e.target.result;
-            };
-            reader.readAsBinaryString(fileObject);
-            console.log(fileObject);
-        }
+                this.form.image = reader.result;
+                console.log(this.form.image)
+            }
+            reader.readAsDataURL(selectedImage)
+        },
+        
     },
     name:'UserForm',
     components:{
