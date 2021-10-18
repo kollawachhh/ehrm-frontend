@@ -36,10 +36,7 @@ export default new Vuex.Store({
         },
         async leaves({ commit }, { startDate, endDate, type, totalDate, reason }) {
             let res = await LeaveService.addLeaves({ startDate, endDate, type, totalDate, reason})
-            console.log(res)
-                // if (res.success) {
             commit("add", res)
-                // }
             return res
         },
         async fetchAllLeaves({ commit }) {
