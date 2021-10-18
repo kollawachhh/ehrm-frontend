@@ -5,11 +5,14 @@
             <div class="mx-auto h-full bg-gray-300 rounded-md ">
                 <div class="flex bg-primary py-5 rounded-t-md ">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
-                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-auto">รายการลงงาน ({{ this.date.day  }})</span>
+                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-auto">รายการลงงาน</span>
                     <span v-if="this.role != 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
-                    <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
+                    <select v-if="this.role != 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
                     </select>
+                    <date-picker v-if="this.role === 'admin' && this.selectedUser == null" 
+                        v-model="date.day" value-type="format" format="YYYY-MM-DD" @change="change" :clearable="false"
+                    />  
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6 px-2">
                     <table class="mx-auto h-full mt-1 ">
@@ -53,7 +56,7 @@ export default {
     name:'TaskList',
     components: {
         Header,
-        Footer
+        Footer,
     },
     data() {
         return {
@@ -113,8 +116,7 @@ export default {
             this.logList = LogStore.getters.logs.data
         },
         async fetchLogsByDate() {
-            let date = new Date().toLocaleDateString('en-CA');
-            await LogStore.dispatch('fetchLogsByDate', date)
+            await LogStore.dispatch('fetchLogsByDate', this.date.day)
             this.logList = LogStore.getters.logs.data
         },
         async backPage(){
@@ -151,7 +153,10 @@ export default {
                 case 'December':
                     return 'ธันวาคม'
             }   
-        }
+        },
+        async change() {
+            this.fetchLogsByDate()
+        },
     },
     computed: {
         resultQuery(){
@@ -162,11 +167,33 @@ export default {
                 }else{
                     return this.logList;
             }
-        }
+        },
     }
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+    .mx-datepicker {
+        width: 160px;
+    }
+    .mx-input-wrapper {
+        width: 150px;
+        margin-right: 0px;
+    }
+    .mx-input {
+        background-color: rgb(15, 76, 129), var(--tw-bg-opacity);
+        color: white;
+        font-size: 20px;
+        display: inline-block;
+        width: 100%;
+        height: 30px;
+        padding: 1px 1px 1px 10px;
+        line-height: 1.4;
+        border: 0;
+        font-family: 'Kanit';
+    }
+    .mx-icon-calendar {
+        right: 20px;
+        color: white;
+    }
 </style>
