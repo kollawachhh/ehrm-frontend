@@ -144,7 +144,7 @@ export default {
                 },
                 {
                     id: 2,
-                    name: "head",
+                    name: "header",
                 },
                 {
                     id: 3,
@@ -248,6 +248,7 @@ export default {
                 position: this.form.position,
                 department: this.form.department,
                 role:this.form.role,
+                image:this.form.image,
             }
         },
         async backPage(){

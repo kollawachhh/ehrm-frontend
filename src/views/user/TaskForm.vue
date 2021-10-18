@@ -9,7 +9,7 @@
             </div>
             <div class="bg-gray-300 rounded-b-md pb-4">
                 <div class="flex">
-                    <img src="icons/user_test_img.png" alt="" class="mt-5 mx-5 w-28 h-28 rounded-full bg-white">
+                    <img :src="this.user.image" alt="" class="mt-5 mx-5 w-28 h-28 rounded-full bg-white">
                     <div class="py-11">
                         <span class="font-th font-bold text-lg">{{ this.user.name }}</span>
                         <br>
@@ -90,6 +90,7 @@ export default {
                 name: "",
                 position: "",
                 department: "",
+                image: ""
             },
             role: '',
         }
@@ -100,6 +101,7 @@ export default {
         this.user.name = AuthUser.getters.user.name;
         this.user.position = AuthUser.getters.user.position;
         this.user.department = AuthUser.getters.user.department;
+        this.user.image = AuthUser.getters.user.image;
     },
     mounted(){
         if (!this.isAuthen()) {

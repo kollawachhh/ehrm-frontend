@@ -8,7 +8,7 @@
                     <span class="font-th text-white ml-3 text-xl">ข้อมูลคำขอลา</span>
                 </div>
                 <div class="flex bg-gray-300 my-5 w-full rounded-b-md">
-                    <img src="/icons/user_test_img.png" alt="" 
+                    <img :src="this.request.user.image" alt="" 
                          class="w-32 h-32 rounded-full mx-3 bg-white">
                     <div class="font-th text-primary leading-9 my-2">
                         <div class="flex">ชื่อ<p class="ml-10 mr-2">:</p>{{this.request.user.name}}</div>
@@ -55,6 +55,7 @@ export default {
                     name:'',
                     position:'',
                     department:'',
+                    image:''
                 },
             },
         }
