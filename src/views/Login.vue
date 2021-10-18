@@ -53,13 +53,11 @@ export default {
   components: { Header },
   methods: {
         async login() {
-            console.log(this.form);
             if (this.form.username == null || this.form.password == null || this.form.username == "" || this.form.password == "") {
               this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
             }
             else {
               let res = await AuthUser.dispatch('login', this.form)
-              console.log(res);
               if (res.success) {
                 this.$swal("ลงชื่อเข้าใช้สำเร็จ", `ยินดีต้อนรับ คุณ ${res.user.name}`, "success")
                 this.$router.push('/home')

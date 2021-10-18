@@ -144,14 +144,11 @@ export default {
         },
         isAuthen() {
             if(AuthUser.getters.user != null){
-                if(AuthUser.getters.user.is_admin === 1){
-                    this.role = 'Admin'
-                }
                 return AuthUser.getters.isAuthen
             }
         },
         async filterUserData(){
-            let logs = await LogStore.dispatch("getLogs")
+            let logs = await LogStore.dispatch("fetchLogsById", AuthUser.getters.user.id)
             logs.data.forEach(log => { 
                 if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
                     this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")

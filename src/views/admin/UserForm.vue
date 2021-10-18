@@ -61,7 +61,7 @@
                         <span class="flex pb-1">role</span>
                         <select 
                             v-model="form.role"
-                            class="p-2 w-11/12 rounded-md" name="" id="">
+                            class="p-2 w-11/12 rounded-md bg-white" name="" id="">
                             <option v-for="(role, index) in roles" :value="role.name" :key="index">
                                 {{role.name}}
                             </option>
@@ -182,13 +182,13 @@ export default {
         },
         clearForm() {
             this.form = {
-                name: "",
-                email: "",
+                name: this.form.name,
+                email: this.form.email,
                 password: "",
                 confirmPassword: "",
-                position: "",
-                department: "",
-                role:'user',
+                position: this.form.position,
+                department: this.form.department,
+                role:this.form.role,
             }
         },
         async backPage(){
