@@ -1,5 +1,9 @@
 # ehrm-frontend
 
+## Desciption
+
+EHRM (Electronic human resource management) คือ ระบบการจัดการด้าน hr ให้แก่บริษัท โดยพนักงานสามารถลงบันทึกเวลาเข้างานและออกงานได้ อีกทั้งยังสามารถลางานได้จากระบบอีกด้วย ทำให้ฝายทรัพยากรมนุษย์สามารถตรวจสอบข้อมูลย้อนหลังในการประเมินรายปีได้อีกด้วย
+
 ## Project setup
 ```
 npm install
@@ -15,21 +19,66 @@ npm run serve
 npm run build
 ```
 
-### Role
-admin
+## Role
+### Admin เจ้าหน้าที่ตรวจสอบระบบ
+    - สร้าง user ในระบบ
+    - ตรวจสอบ logs และ leaves ของ users ทั้งหมด
+### Header หัวหน้าแผนก
+    - ลงชื่อเข้า / ออก เวลาทำงาน
+    - ขอลางาน
+    - อนุมัติการลาของพนักงานในแผนก
+### User พนักงานทั่วไป
+    - ลงชื่อเข้า / ออก เวลาทำงาน
+    - ขอลางาน
+
+## user example
 ```
-เพิ่ม user,head
-ดูประวัติการเข้าใช้งานของแต่ละ user,head
+admin : 
+
+    email : admin@admin.com
+    password : password
 ```
-head
 ```
-อนุมัติคำขอลาของ user
-ลงเวลาเข้าและออกงาน
+header :
+
+    hr department
+        email : hr@user.com
+        password : password
+
+    sale department
+        email : sale@user.com
+        password : password
+
+    it department
+        email : it@user.com
+        password : password
 ```
-user
 ```
-ลงเวลาเข้าและออกงาน
-สร้างวันลาเพื่อไปขออนุญาต head ในการลา
+users : 
+
+    hr department
+        email : user1@hr.com
+        password : password
+        email : user2@hr.com
+        password : password
+        email : user3@hr.com
+        password : password
+        
+    sale department
+        email : user1@sale.com
+        password : password
+        email : user2@sale.com
+        password : password
+        email : user3@sale.com
+        password : password
+    
+    it department
+        email : user1@it.com
+        password : password
+        email : user2@it.com
+        password : password
+        email : user3@it.com
+        password : password
 ```
 
 ### Customize configuration
