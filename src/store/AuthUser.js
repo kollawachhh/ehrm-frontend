@@ -32,7 +32,6 @@ export default new Vuex.Store({
     actions: {
         async login({ commit }, { password, username }) {
             let res = await AuthService.login({ password, username })
-            console.log(res)
             if (res.success) {
                 commit("loginSuccess", res)
                 return res

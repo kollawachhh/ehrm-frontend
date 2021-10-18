@@ -69,7 +69,6 @@ export default {
         async fetchWaitingLeaves() {
             await LeaveStore.dispatch('fetchWaitingLeaves')
             this.allRequest = LeaveStore.getters.leaves
-            console.log(this.allRequest)
         },
     },
 }

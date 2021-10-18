@@ -8,7 +8,7 @@
                     <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span>
                     <span v-if="this.role !== 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
                     <select v-if="this.role !== 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
-                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
+                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
                     </select>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6 py-3">
@@ -110,16 +110,18 @@ export default {
         async fetchLeaves() {
             const current = new Date();
             const today = current.toLocaleDateString('en-CA');
-            console.log(today)
             if (this.role === "admin") {
                 //for debug
                 // await LeaveStore.dispatch('fetchLeavesByDate', "2021-10-19")
-                await LeaveStore.dispatch('fetchLeavesByDate', today)
+                if (this.selectedUser == null) {
+                    await LeaveStore.dispatch('fetchLeavesByDate', today)
+                } else {
+                    await LeaveStore.dispatch('fetchLeavesById', this.selectedUser)
+                }
             } else {
                 await LeaveStore.dispatch('fetchLeaves')
             }
             this.leaveList = LeaveStore.getters.leaves
-            console.log("breakelist",this.leaveList)
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";

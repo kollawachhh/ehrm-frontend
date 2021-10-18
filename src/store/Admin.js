@@ -25,7 +25,6 @@ export default new Vuex.Store({
     actions: {
         async fetchAllUser({ commit }) {
             let payload = await AdminService.getAllUser();
-            console.log(payload)
             commit("fetch", payload.data)
         },
         async fetchUser({ commit }, userId){

@@ -22,7 +22,6 @@ export default {
         return user
     },
     async addLeaves({ startDate, endDate, type, totalDate, reason }) {
-        console.log("worked")
         try {
             let url = `${api_endpoint}/api/user/create-leave`
             let body = {
@@ -42,7 +41,6 @@ export default {
     async getAllLeaves() {
         let url = `${api_endpoint}/api/leaves`;
         let headers = AuthService.getApiHeader();
-        console.log(headers)
         try {
             let res = await Axios.get(url, headers)
             return res.data

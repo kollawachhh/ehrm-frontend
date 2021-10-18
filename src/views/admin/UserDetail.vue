@@ -109,7 +109,6 @@ export default {
                 confirmButtonText: 'ใช่',
                 cancelButtonText: 'ไม่',
             }).then((r) => {
-                console.log(r)
                 if(r.value){
                     AuthUser.dispatch('logout')
                     this.$swal("ออกจากระบบแล้ว!", `คุณได้ทำการออกจากระบบ`, "success")

@@ -41,7 +41,6 @@ export default {
                 password: password
             }
             let res = await Axios.post(url, body)
-            console.log(res)
             if (res.status === 200 && res.data !== 'out') {
                 let user = {
                     jwt: res.data.access_token,
