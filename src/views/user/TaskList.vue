@@ -5,11 +5,10 @@
             <div class="mx-auto h-full bg-gray-300 rounded-md ">
                 <div class="flex bg-primary py-5 rounded-t-md ">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
-                    <!-- <span v-if="this.role === 'Admin'" class="flex font-th text-white text-xl mx-auto">รายการลงงาน {{ this.date.day  }}</span>
-                    <span v-else class="flex font-th text-white text-xl mx-auto">{{ this.date.month  }} - {{ this.date.year }}</span> -->
-                    <span class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month) }} - {{ this.date.year }}</span>
+                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-auto">รายการลงงาน ({{ this.date.day  }})</span>
+                    <span v-if="this.role != 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
                     <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
-                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
+                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
                     </select>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6 px-2">
@@ -37,7 +36,8 @@
                 </div>
             </div>
         </div>
-        <Footer tab='tasks'></Footer>
+        <Footer v-if="this.selectedUser == null" tab='tasks'></Footer>
+        <Footer v-if="this.selectedUser != null" tab='none'></Footer>
     </div>
 </template>
 
@@ -57,6 +57,7 @@ export default {
     },
     data() {
         return {
+            selectedUser: this.$route.params.id,
             date: {
                 month: "",
                 year: "",
@@ -91,8 +92,11 @@ export default {
         this.date.month = today.toLocaleString('default', { month: 'long' })
         this.date.year = today.getFullYear();
         this.date.day = today.toLocaleDateString('en-CA');
-        if (this.role === 'admin'){
+
+        if (this.role === 'admin' && this.selectedUser == null){
             await this.fetchLogsByDate()
+        } else if (this.role === 'admin' && this.selectedUser != null){
+            await this.fetchLogsById()
         } else {
             await this.fetchLogs()
         }
@@ -100,8 +104,8 @@ export default {
     },
     methods:{
         isAuthen() {
-            if(AuthUser.getters.user != null){
-            return AuthUser.getters.isAuthen
+            if(AuthUser.getters.user != null) {
+                return AuthUser.getters.isAuthen
             }
         },
         async fetchLogs() {
@@ -111,10 +115,14 @@ export default {
         async fetchLogsByDate() {
             let date = new Date().toLocaleDateString('en-CA');
             await LogStore.dispatch('fetchLogsByDate', date)
-            this.logList = LogStore.getters.logs
+            this.logList = LogStore.getters.logs.data
         },
         async backPage(){
             this.$router.go(-1)
+        },
+        async fetchLogsById() {
+            await LogStore.dispatch('fetchLogsById', this.selectedUser)
+            this.logList = LogStore.getters.logs.data
         },
         getMonthTH(month){
             switch(month){

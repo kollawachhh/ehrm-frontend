@@ -75,10 +75,10 @@ export default {
     },
     methods:{
         async getTaskList(){
-            this.$router.push('/task')
+            this.$router.push(`/task/${this.user_id}`)
         },
         async getBreakList(){
-            this.$router.push('/break')
+            this.$router.push(`/break/${this.user_id}`)
         },
         async backPage(){
             if(AuthUser.getters.user.role !== 'admin'){

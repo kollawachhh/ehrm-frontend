@@ -22,7 +22,7 @@
                                     <tr v-for="(leave, index) in allRequest" :key="index" class="flex font-eng border-b-2 border-primary  text-sm">
                                         <button class="flex w-full py-2" @click="getDetail(leave.id)">
                                             <td class="text-center w-1/12">{{leave.user_id}}</td>
-                                            <td class="text-center w-5/12">{{leave.user.name}}</td>
+                                            <td class="text-center w-5/12">{{leave.name}}</td>
                                             <td class="text-center w-6/12">{{getCreatedTime(leave.created_at)}} น.</td>
                                         </button>
                                     </tr>
@@ -69,6 +69,7 @@ export default {
         async fetchWaitingLeaves() {
             await LeaveStore.dispatch('fetchWaitingLeaves')
             this.allRequest = LeaveStore.getters.leaves
+            console.log(this.allRequest)
         },
     },
 }

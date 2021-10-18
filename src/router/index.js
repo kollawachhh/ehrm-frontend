@@ -31,12 +31,22 @@ const routes = [
     component: TaskList,
   },
   {
+    path: '/task/:id',
+    name: 'TaskList',
+    component: TaskList,
+  },
+  {
     path: '/taskForm',
     name: 'TaskForm',
     component: TaskForm,
   },
   {
     path: '/break',
+    name: 'BreakList',
+    component: BreakList,
+  },
+  {
+    path: '/break/:id',
     name: 'BreakList',
     component: BreakList,
   },
@@ -74,7 +84,7 @@ const routes = [
     path: '/request/:id',
     name: 'RequestDetail',
     component: RequestDetail,
-  }
+  },
 ]
 
 const router = new VueRouter({
