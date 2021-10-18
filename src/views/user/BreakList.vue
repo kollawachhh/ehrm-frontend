@@ -16,7 +16,7 @@
                         <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">ชื่อพนักงาน : {{leave.user.name}}</span>
+                                <span class="flex mb-3">ชื่อพนักงาน : {{leave.name}}</span>
                                 <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
                                 <span class="flex mb-3">ระยะเวลา : {{ leave.leave_dates }} วัน</span>
                                 <span class="flex mb-3">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
@@ -110,16 +110,16 @@ export default {
         async fetchLeaves() {
             const current = new Date();
             const today = current.toLocaleDateString('en-CA');
+            console.log(today)
             if (this.role === "admin") {
-                if (this.selectedUser == null) {
-                    await LeaveStore.dispatch('fetchLeavesByDate', today)
-                } else {
-                    await LeaveStore.dispatch('fetchLeavesById', this.selectedUser)
-                }
+                //for debug
+                // await LeaveStore.dispatch('fetchLeavesByDate', "2021-10-19")
+                await LeaveStore.dispatch('fetchLeavesByDate', today)
             } else {
                 await LeaveStore.dispatch('fetchLeaves')
             }
-            this.leaveList = LeaveStore.getters.leaves.data
+            this.leaveList = LeaveStore.getters.leaves
+            console.log("breakelist",this.leaveList)
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";

@@ -55,7 +55,6 @@ export default {
         let headers = AuthService.getApiHeader();
         try {
             let res = await Axios.get(url, headers)
-            console.log("leave", res)
             return res.data
         } catch (e) {
 

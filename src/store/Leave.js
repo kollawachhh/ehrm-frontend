@@ -45,7 +45,6 @@ export default new Vuex.Store({
         },
         async fetchLeavesByDate({ commit }, date) {
             let payload = await LeaveService.getLeavesByDate(date);
-            console.log(payload)
             commit("fetch", payload)
         },
         async fetchWaitingLeaves({ commit }) {
