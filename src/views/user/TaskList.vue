@@ -8,7 +8,7 @@
                     <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-auto">รายการลงงาน ({{ this.date.day  }})</span>
                     <span v-if="this.role != 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
                     <select v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
-                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ month.name }}</option>
+                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
                     </select>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6 px-2">

@@ -34,17 +34,7 @@ export default {
             }
             let headers = AuthService.getApiHeader();
             let res = await Axios.post(url, body, headers)
-            console.log(res)
             return res.data.status;
-            // if (res.status === 201) {
-            //     let leave = {
-            //         leave: res.data
-            //     }
-            //     localStorage.setItem(auth_key, JSON.stringify(leave))
-            //     return res.data
-            // } else {
-            //     console.log("NOT 200", res)
-            // }
         } catch (e) {
 
         }
@@ -65,7 +55,7 @@ export default {
         let headers = AuthService.getApiHeader();
         try {
             let res = await Axios.get(url, headers)
-            console.log(res)
+            console.log("leave", res)
             return res.data
         } catch (e) {
 
