@@ -150,7 +150,6 @@ export default {
         },
         async filterUserData(){
             let logs = await LogStore.dispatch("fetchLogsById", AuthUser.getters.user.id)
-            console.log(logs);
             logs.data.forEach(log => { 
                 if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
                     this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")

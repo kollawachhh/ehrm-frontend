@@ -22,7 +22,6 @@ export default {
         return user
     },
     async addLeaves({ startDate, endDate, type, totalDate, reason }) {
-        console.log("worked")
         try {
             let url = `${api_endpoint}/api/user/create-leave`
             let body = {
@@ -42,7 +41,6 @@ export default {
     async getAllLeaves() {
         let url = `${api_endpoint}/api/leaves`;
         let headers = AuthService.getApiHeader();
-        console.log(headers)
         try {
             let res = await Axios.get(url, headers)
             return res.data
@@ -51,14 +49,35 @@ export default {
         }
     },
     async getLeavesByDate(date) {
-        let url = `${api_endpoint}/api/leaves/by-date/${date}`
+        let url = `${api_endpoint}/api/leaves/by-date/${date}`;
         let headers = AuthService.getApiHeader();
         try {
             let res = await Axios.get(url, headers)
-            console.log("leave",res)
             return res.data
         } catch (e) {
 
+        }
+    },
+    async getLeavesById(id) {
+        try {
+            let url = `${api_endpoint}/api/leaves/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header)
+            return res
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
         }
     },
     async getWaitingLeaves() {

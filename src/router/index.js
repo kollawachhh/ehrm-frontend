@@ -32,7 +32,7 @@ const routes = [
   },
   {
     path: '/task/:id',
-    name: 'TaskList',
+    name: 'Task',
     component: TaskList,
   },
   {
@@ -47,7 +47,7 @@ const routes = [
   },
   {
     path: '/break/:id',
-    name: 'BreakList',
+    name: 'Break',
     component: BreakList,
   },
   {
@@ -68,6 +68,11 @@ const routes = [
   {
     path: '/user/:id',
     name: 'UserDetail',
+    component: UserDetail,
+  },
+  {
+    path: '/detail',
+    name: 'Detail',
     component: UserDetail,
   },
   {

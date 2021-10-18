@@ -17,7 +17,6 @@ export default {
     },
     async getLogsByDate(date) {
         let url = `${api_endpoint}/api/logs/by-date/${date}`;
-        console.log(date);
         let headers = AuthService.getApiHeader();
         try {
             let res = await Axios.get(url, headers)
@@ -34,7 +33,6 @@ export default {
               }
             }
         } catch(e) {
-            console.log("kuy")
         }
     },
     async addTimeIn(payload) {
@@ -69,7 +67,6 @@ export default {
             end_time : payload.time,
             date : payload.date
         }
-        console.log(body)
         try {
         //   let headers = AuthService.getApiHeader()
           let res = await Axios.post(url, body, headers)

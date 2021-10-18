@@ -5,18 +5,24 @@
             <div class="mx-auto mt-6 w-10/12">
                 <div class="flex bg-primary py-5 rounded-t-md">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
-                    <span v-if="this.role === 'admin'" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span>
-                    <span v-if="this.role !== 'admin'" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
-                    <select v-if="this.role !== 'admin'" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
+                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-2">รายงานการลา</span><br>
+                    <date-picker @change="getDateSelect" v-if="this.role === 'admin' && this.selectedUser == null" 
+                        v-model="date.day" type="date"
+                        :default-value="this.date.day"  
+                        value-type="format" format="YYYY-MM-DD"
+                        :clearable=false
+                        calendar-class=""></date-picker>
+                    <span v-if="this.role !== 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
+                    <select v-if="this.role !== 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
                     </select>
                 </div>
                 <div class="bg-gray-300 rounded-b-md h-5/6 py-3">
-                    <div class="h-full mt-0 overflow-scroll" v-if="this.role === 'admin'">
+                    <div class="h-full mt-0 overflow-scroll" v-if="this.role === 'admin' && this.selectedUser == null">
                         <div class="pb-2" v-for="(leave, index) in this.leaveList" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
-                                <span class="flex mb-3">ชื่อพนักงาน : {{leave.user.name}}</span>
+                                <span class="flex mb-3">ชื่อพนักงาน : {{leave.name}}</span>
                                 <span class="flex mb-3">เหตุผล : {{ leave.cause }}</span>
                                 <span class="flex mb-3">ระยะเวลา : {{ leave.leave_dates }} วัน</span>
                                 <span class="flex mb-3">วันที่ : {{ leave.date_start }} - {{ leave.date_end }}</span>
@@ -29,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-full mt-0 overflow-scroll" v-if="this.role !== 'admin'">
+                    <div class="h-full mt-0 overflow-scroll" v-if="this.role !== 'admin' || this.selectedUser != null">
                         <div class="pb-2" v-for="(leave, index) in resultQuery" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
@@ -48,7 +54,8 @@
                 </div>
             </div>
         </div>
-        <Footer tab='breaks'></Footer>
+        <Footer v-if="this.selectedUser == null" tab='breaks'></Footer>
+        <Footer v-if="this.selectedUser != null" tab='none'></Footer>
     </div>
 </template>
 
@@ -59,6 +66,7 @@ import AuthUser from '@/store/AuthUser'
 import LeaveStore from '@/store/Leave'
 import Dropdown from 'vue-simple-search-dropdown';
 import moment from 'moment'
+
 export default {
     name:'BreakList',
     components: {
@@ -68,6 +76,7 @@ export default {
     },
     data() {
         return {
+            selectedUser: this.$route.params.id,
             date: {
                 month: "",
                 year: "",
@@ -104,15 +113,23 @@ export default {
                 return AuthUser.getters.isAuthen
             }
         },
+        getDateSelect() {
+            //console.log("KK")
+            this.fetchLeaves()
+        },
         async fetchLeaves() {
-            const current = new Date();
-            const today = current.toLocaleDateString('en-CA');
             if (this.role === "admin") {
-                await LeaveStore.dispatch('fetchLeavesByDate', today)
+                //for debug
+                // await LeaveStore.dispatch('fetchLeavesByDate', "2021-10-19")
+                if (this.selectedUser == null) {
+                    await LeaveStore.dispatch('fetchLeavesByDate', this.date.day)
+                } else {
+                    await LeaveStore.dispatch('fetchLeavesById', this.selectedUser)
+                }
             } else {
                 await LeaveStore.dispatch('fetchLeaves')
             }
-            this.leaveList = LeaveStore.getters.leaves.data
+            this.leaveList = LeaveStore.getters.leaves
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";
