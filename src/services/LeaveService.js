@@ -58,9 +58,9 @@ export default {
 
         }
     },
-    async getLeavesById(id) {
+    async getLeavesById(id, dateStart, dateEnd) {
         try {
-            let url = `${api_endpoint}/api/leaves/${id}`;
+            let url = `${api_endpoint}/api/leaves/${dateStart}-${dateEnd}/${id}`;
             let header = AuthService.getApiHeader();
             let res = await Axios.get(url, header)
             return res

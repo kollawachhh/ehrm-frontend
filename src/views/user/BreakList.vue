@@ -13,7 +13,7 @@
                         :clearable=false
                         calendar-class=""></date-picker>
                     <span v-if="this.role !== 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
-                    <select v-if="this.role !== 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
+                    <select @change="getMonthSelect" v-if="this.role !== 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
                     </select>
                 </div>
@@ -35,7 +35,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-full mt-0 overflow-scroll" v-if="this.role !== 'admin' || this.selectedUser != null">
+                    <div class="h-full mt-0 overflow-scroll" v-if="this.role === 'admin' && this.selectedUser != null">
+                        <div class="pb-2" v-for="(leave, index) in resultQuery" :key="index">
+                            <span class="flex font-th pl-4">{{ leave.type }}</span>
+                            <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
+                                <span class="flex mb-3">เหตุผล <p class="ml-5 mr-2">:</p> {{ leave.cause }}</span>
+                                <span class="flex mb-3">ระยะเวลา <p class="ml-2 mr-2">:</p> {{ leave.leave_dates }} วัน</span>
+                                <span class="flex mb-3">วันที่ <p class="ml-9 mr-2">:</p> {{ leave.date_start }} - {{ leave.date_end }}</span>
+                                <span class="flex">
+                                    สถานะ <p class="ml-5 mr-2">:</p>
+                                    <span v-if="leave.status === 'confirmed'" class="text-emerald-500">ได้รับการยืนยัน</span>
+                                    <span v-if="leave.status === 'waiting'" class="text-blue-500">รอการยืนยัน</span>
+                                    <span v-if="leave.status === 'cancelled'" class="text-red-500">ปฏิเสธการยืนยัน</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-full mt-0 overflow-scroll" v-if="this.role !== 'admin'">
                         <div class="pb-2" v-for="(leave, index) in resultQuery" :key="index">
                             <span class="flex font-th pl-4">{{ leave.type }}</span>
                             <div class="w-11/12 bg-white font-th mx-auto rounded-md border-primary border-2 p-2">
@@ -85,19 +101,23 @@ export default {
             leaveList: [],
             role: AuthUser.getters.user.role,
             months:[
-                { id: '1', name: 'January' },
-                { id: '2', name: 'Febuary' },
-                { id: '3', name: 'March' },
-                { id: '4', name: 'April' },
-                { id: '5', name: 'May' },
-                { id: '6', name: 'June' },
-                { id: '7', name: 'July' },
-                { id: '8', name: 'August' },
-                { id: '9', name: 'September' },
+                { id: '01', name: 'January' },
+                { id: '02', name: 'Febuary' },
+                { id: '03', name: 'March' },
+                { id: '04', name: 'April' },
+                { id: '05', name: 'May' },
+                { id: '06', name: 'June' },
+                { id: '07', name: 'July' },
+                { id: '08', name: 'August' },
+                { id: '09', name: 'September' },
                 { id: '10', name: 'October' },
                 { id: '11', name: 'November' },
                 { id: '12', name: 'December' },
             ],
+            dateSelect: {
+                dateStart: this.date.day,
+                dateEnd: this.date
+            },
             status:'',
         }
     },
@@ -117,6 +137,15 @@ export default {
             //console.log("KK")
             this.fetchLeaves()
         },
+        getMonthSelect() {
+            this.months.forEach(function(month) {
+                if (month.name == this.date.month) {
+                    this.dateSelect.dateStart = this.date.year+"-"+month.id+"-01"
+                    this.dateSelect.dateEnd = this.date.year+"-"+month.id+"-31"
+                }
+            })
+            this.fetchLeaves()
+        },
         async fetchLeaves() {
             if (this.role === "admin") {
                 //for debug
@@ -124,7 +153,7 @@ export default {
                 if (this.selectedUser == null) {
                     await LeaveStore.dispatch('fetchLeavesByDate', this.date.day)
                 } else {
-                    await LeaveStore.dispatch('fetchLeavesById', this.selectedUser)
+                    await LeaveStore.dispatch('fetchLeavesById', this.selectedUser, this.dateSelect.dateStart, this.dateSelect.dateEnd)
                 }
             } else {
                 await LeaveStore.dispatch('fetchLeaves')
