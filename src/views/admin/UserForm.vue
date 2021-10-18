@@ -9,9 +9,11 @@
             </div>
             <div class="bg-gray-300 rounded-b-md pb-3">
                 <form @submit.prevent="submit">
-                    <div class="pl-6 pt-5">
+                    <div class="pl-6 pt-5" >
                         <span class="flex font-th pb-1">ชื่อ</span>
                         <input v-model="form.name" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกชื่อ">
+                        <p class="text-red-500" v-if="!$v.form.name.required">name is required</p>
+                        <!-- <p class="text-red-500" v-if="!$v.form.name.minLength">name must have at least {{ $v.form.name.$params.minLength.min }} letters</p> -->
                     </div>
                     <div class="pl-6 py-4">
                         <span class="flex font-th pb-1">อีเมลล์</span>
@@ -21,19 +23,24 @@
                     <div class="flex w-11/12">    
                         <div class="pl-6">
                             <input v-model="form.password" type="password" class="p-2 font-th w-full rounded-md" placeholder="กรอกรหัสผ่าน">
+                            <!-- <p class="text-red-500" v-if="!$v.form.password.required">password is required</p>
+                            <p class="text-red-500" v-if="!$v.form.password.minLength">password must have at least {{ $v.form.name.$params.minLength.min }} letters</p> -->
                         </div>
                         <div class="ml-5">
                             <input v-model="form.confirmPassword" type="password" class="p-2 font-th w-full rounded-md" placeholder="ยืนยันรหัสผ่าน">
+                            <!-- <p class="text-red-500" v-if="!$v.form.confirmPassword.sameAsPassword">Passwords must be identical</p> -->
                         </div>
                     </div>
                     
                     <div class="pl-6 pt-4">
                         <span class="flex font-th pb-1">ตำแหน่ง</span>
                         <input v-model="form.position" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกตำแหน่งของผู้ใช้">
+                        <!-- <p class="text-red-500" v-if="!$v.form.position.required">position is required</p> -->
                     </div>
                     <div class="pl-6 pt-4">
                         <span class="flex font-th pb-1">แผนก</span>
                         <input v-model="form.department" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกแผนกของผู้ใช้">
+                        <!-- <p class="text-red-500" v-if="!$v.form.department.required">department is required</p> -->
                     </div>
                     <div class="font-eng pl-6 pt-4">
                         <span class="flex pb-1">role</span>
@@ -59,6 +66,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import Dropdown from 'vue-simple-search-dropdown';
 import AdminStore from "@/store/Admin"
+import { required, minLength, sameAs} from 'vuelidate/lib/validators'
 
 export default {
     data() {
@@ -86,6 +94,30 @@ export default {
                     name: "admin"
                 },
             ]
+        }
+    },
+    validations: {
+        form:{
+            name: {
+                required,
+                minLength: minLength(3)
+            },
+            email:{
+                required
+            },
+            password:{
+                required,
+                minLength: minLength(8)
+            },
+            confirmPassword: {
+                sameAsPassword: sameAs('password')
+            },
+            position:{
+                required
+            },
+            department:{
+                required
+            },
         }
     },
     methods:{
@@ -118,9 +150,10 @@ export default {
                                 role:this.form.role
                             }
                             this.putData(newUser)
-                    }else{
+                            this.clearForm()
+                    }
+                    else{
                         this.$swal("ข้อมูลไม่ถูกต้อง", "กรุณาลองอีกครั้ง", "error")
-                        this.clearForm()
                     }
                 }
             });

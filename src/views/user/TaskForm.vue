@@ -125,8 +125,6 @@ export default {
         },
         async setTaskOutNow(){
             this.form.taskOutNow = true
-            this.form.taskOut = moment().format('HH:mm')
-            this.form.totalTime = moment.utc(moment(this.form.taskOut, "HH:mm").diff(moment(this.form.taskIn, "HH:mm"))).format("HH:mm")
             let today = new Date();
             let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
             let time = moment().format('HH:mm:ss')
@@ -135,6 +133,7 @@ export default {
                 date: date
             }
             await LogStore.dispatch("addTimeOut",payload)
+            this.filterUserData()
         },
         clearForm() {
             this.form = {
@@ -153,7 +152,6 @@ export default {
         },
         async filterUserData(){
             let logs = await LogStore.dispatch("getLogs")
-            console.log(await LogStore.dispatch("getLogs"));
             logs.data.forEach(log => { 
                 if(moment(log.date, "YYYY-MM-DD").isSame(moment().format("YYYY-MM-DD"))){
                     this.form.taskIn = moment(log.login_time, "HH:mm:ss").format("HH:mm")

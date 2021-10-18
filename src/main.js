@@ -12,6 +12,8 @@ import VueMoment from 'vue-moment'
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 
+import Vuelidate from 'vuelidate'
+
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 
@@ -21,6 +23,8 @@ Vue.use(VueTimepicker)
 Vue.use(Dropdown)
 Vue.use(DatePicker)
 Vue.use(VueSimpleAlert, { reverseButtons: true })
+
+Vue.use(Vuelidate)
 
 Vue.use(VueAxios, axios)
 Vue.use(VueSwal)
