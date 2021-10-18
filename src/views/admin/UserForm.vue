@@ -10,33 +10,85 @@
             <div class="bg-gray-300 rounded-b-md pb-3">
                 <form @submit.prevent="submit">
                     <div class="pl-6 pt-5">
-                        <span class="flex font-th pb-1">ชื่อ</span>
-                        <input v-model="form.name" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกชื่อ">
+                        <span class="flex font-th pb-1">
+                            ชื่อ
+                            <span v-if="this.errors === 'fields required' || this.errors === 'name required'" 
+                            class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <input 
+                            v-model="form.name" 
+                            type="text" 
+                            class="p-2 font-th w-11/12 rounded-md" 
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'name required' }"
+                            placeholder="กรอกชื่อ">
                     </div>
                     <div class="pl-6 py-4">
-                        <span class="flex font-th pb-1">อีเมลล์</span>
-                        <input v-model="form.email" type="email" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกอีเมลล์ผู้ใช้">
+                        <span class="flex font-th pb-1">
+                            อีเมลล์
+                            <span v-if="this.errors === 'fields required' || this.errors === 'email required'" 
+                            class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <input 
+                            v-model="form.email" 
+                            type="email" 
+                            class="p-2 font-th w-11/12 rounded-md" 
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'email required'}"
+                            placeholder="กรอกอีเมลล์ผู้ใช้">
                     </div>
-                    <span class="font-th ml-6">รหัสผ่าน</span>
+                    <span class="font-th ml-6">
+                        รหัสผ่าน
+                        <span v-if="this.errors === 'fields required' || this.errors === 'password required' || this.errors === 'confirm password required' || this.errors === 'password invalid'" 
+                        class="text-red-500 ml-1 font-bold text-lg">!</span>
+                    </span>
                     <div class="flex w-11/12">    
                         <div class="pl-6">
-                            <input v-model="form.password" type="password" class="p-2 font-th w-full rounded-md" placeholder="กรอกรหัสผ่าน">
+                            <input 
+                                v-model="form.password" 
+                                type="password" 
+                                class="p-2 font-th w-full rounded-md" 
+                                v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'password required' || this.errors === 'password invalid'}"
+                                placeholder="กรอกรหัสผ่าน">
                         </div>
                         <div class="ml-5">
-                            <input v-model="form.confirmPassword" type="password" class="p-2 font-th w-full rounded-md" placeholder="ยืนยันรหัสผ่าน">
+                            <input 
+                                v-model="form.confirmPassword" 
+                                type="password" 
+                                class="p-2 font-th w-full rounded-md" 
+                                v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'confirm password required' || this.errors === 'password invalid'}"
+                                placeholder="ยืนยันรหัสผ่าน">
                         </div>
                     </div>
                     
                     <div class="pl-6 pt-4">
-                        <span class="flex font-th pb-1">ตำแหน่ง</span>
-                        <input v-model="form.position" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกตำแหน่งของผู้ใช้">
+                        <span class="flex font-th pb-1">
+                            ตำแหน่ง
+                            <span v-if="this.errors === 'fields required' || this.errors === 'position required'" 
+                            class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <input 
+                            v-model="form.position" 
+                            type="text" 
+                            class="p-2 font-th w-11/12 rounded-md" 
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'position required'}"
+                            placeholder="กรอกตำแหน่งของผู้ใช้">
                     </div>
                     <div class="pl-6 pt-4">
-                        <span class="flex font-th pb-1">แผนก</span>
-                        <input v-model="form.department" type="text" class="p-2 font-th w-11/12 rounded-md" placeholder="กรอกแผนกของผู้ใช้">
+                        <span class="flex font-th pb-1">
+                            แผนก
+                            <span v-if="this.errors === 'fields required' || this.errors === 'department required'" 
+                            class="text-red-500 ml-1 font-bold text-lg">!</span>
+                        </span>
+                        <input 
+                            v-model="form.department" 
+                            type="text" 
+                            class="p-2 font-th w-11/12 rounded-md" 
+                            v-bind:class="{'border border-red-400': this.errors === 'fields required' || this.errors === 'department required'}"
+                            placeholder="กรอกแผนกของผู้ใช้">
                     </div>
                     <div class="font-eng pl-6 pt-4">
-                        <span class="flex pb-1">role</span>
+                        <span class="flex pb-1">
+                            role
+                        </span>
                         <select 
                             v-model="form.role"
                             class="p-2 w-11/12 rounded-md bg-white" name="" id="">
@@ -45,7 +97,7 @@
                             </option>
                         </select>
                     </div>
-                    <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-12">ยืนยัน</button>
+                    <button type="submit" class=" flex font-th bg-primary text-white px-3 py-1 rounded-md mx-auto mt-9">ยืนยัน</button>
                 </form>
             </div>
         </div>
@@ -85,7 +137,8 @@ export default {
                     id: 3,
                     name: "admin"
                 },
-            ]
+            ],
+            errors: '',
         }
     },
     methods:{
@@ -118,8 +171,45 @@ export default {
                                 role:this.form.role
                             }
                             this.putData(newUser)
-                    }else{
-                        this.$swal("ข้อมูลไม่ถูกต้อง", "กรุณาลองอีกครั้ง", "error")
+                    }
+                    else{
+                        if( this.form.name === "" &&
+                            this.form.email === "" &&
+                            this.form.password === "" &&
+                            this.form.confirmPassword === "" &&
+                            this.form.position === "" &&
+                            this.form.department === ""){
+                                this.errors = 'fields required'
+                                this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกข้อมูล", "error")
+                        }
+                        else if(this.form.name === ""){
+                            this.errors = 'name required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกชื่อ", "error")
+                        }
+                        else if(this.form.email === ""){
+                            this.errors = 'email required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกอีเมลล์", "error")
+                        }
+                        else if(this.form.password === ""){
+                            this.errors = 'password required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกรหัสผ่าน", "error")
+                        }
+                        else if(this.form.confirmPassword === ""){
+                            this.errors = 'confirm password required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณายืนยันรหัสผ่าน", "error")
+                        }
+                        else if(this.form.position === ""){
+                            this.errors = 'position required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกตำแหน่ง", "error")
+                        }
+                        else if(this.form.department === ""){
+                            this.errors = 'department required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกแผนก", "error")
+                        }
+                        else if(this.form.password !== this.form.confirmPassword){
+                            this.errors = 'password invalid'
+                            this.$swal("ข้อมูลผิดพลาด", "ยืนยันรหัสผ่านผิด", "error")
+                        }
                         this.clearForm()
                     }
                 }
