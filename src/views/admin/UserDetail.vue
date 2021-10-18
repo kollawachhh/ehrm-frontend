@@ -9,7 +9,7 @@
                 </div>
                 <div class="bg-gray-300 w-full rounded-b-md h-5/6 ">
                     <div class="my-5">
-                        <img src="/icons/user_test_img.png" alt="" class="w-40 h-40 rounded-full mx-auto  bg-white">
+                        <img :src=this.currentUser.image alt="" class="w-40 h-40 rounded-full mx-auto bg-white">
                     </div>
                     <hr class="flex w-80 mx-auto border-1 border-white">
                     <div class="font-th text-primary leading-9 my-5">

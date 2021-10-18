@@ -11,8 +11,12 @@
                 <form @submit.prevent="submit" class="h-full">
                     <div class="h-full overflow-scroll">
                         <div class="w-5/6 mx-auto mt-3">
-                            <span class="flex font-th pb-1"> รูปโปรไฟล์</span>
-                            <img :src="this.form.image" alt="">
+                            <span class="flex font-th pb-1">
+                                รูปโปรไฟล์
+                                <span v-if="this.errors === 'fields required' || this.errors === 'image required'" 
+                                class="text-red-500 ml-1 font-bold text-lg">!</span>    
+                            </span>
+                            <img :src="this.form.image" alt="" class="mb-2">
                             <input @change="handleImage" class="w-full font-eng mx-auto" type="file" accept="image/*">
                         </div>
                         <div class="pl-6 pt-5">
@@ -170,6 +174,7 @@ export default {
                         this.form.position !== "" &&
                         this.form.department !== "" &&
                         this.form.role !== "" &&
+                        this.form.image !== "" &&
                         this.form.password === this.form.confirmPassword){
                             let newUser = {
                                 name:this.form.name,
@@ -177,7 +182,8 @@ export default {
                                 password:this.form.password,
                                 position:this.form.position,
                                 department:this.form.department,
-                                role:this.form.role
+                                role:this.form.role,
+                                image:this.form.image,
                             }
                             this.putData(newUser)
                     }
@@ -190,6 +196,10 @@ export default {
                             this.form.department === ""){
                                 this.errors = 'fields required'
                                 this.$swal("ข้อมูลผิดพลาด", "กรุณากรอกข้อมูล", "error")
+                        }
+                        else if(this.form.image === ""){
+                            this.errors = 'image required'
+                            this.$swal("ข้อมูลผิดพลาด", "กรุณาอัปโหลดรูป", "error")
                         }
                         else if(this.form.name === ""){
                             this.errors = 'name required'
@@ -249,7 +259,6 @@ export default {
 
             reader.onloadend = () => {
                 this.form.image = reader.result;
-                console.log(this.form.image)
             }
             reader.readAsDataURL(selectedImage)
         },
