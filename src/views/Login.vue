@@ -11,18 +11,22 @@
         <form @submit.prevent="login">
           <div class="h-40">
             <div class="h-20">
-              <p class="font-th text-black text-1xl w-4/5 m-auto pt-3 pb-1">ชื่อผู้ใช้</p>
+              <p class="font-th text-black text-1xl w-4/5 m-auto pt-3 pb-1">อีเมลล์
+              <span v-if="this.errors === 'fields required' || this.errors === 'email required'" class="text-red-500 font-bold text-lg">!</span></p>
               <input 
                 class="flex items-center w-4/5 h-10 m-auto rounded-md px-3" 
+                v-bind:class="{'border-2 border-red-500': this.errors === 'fields required' || this.errors === 'email required'}"
                 type="text"
                 v-model="form.username"
-                placeholder="กรอกชื่อผู้ใช้"
+                placeholder="กรอกอีเมลล์"
               >
             </div>
             <div class="h-20">
-              <p class="font-th text-black text-1xl w-4/5 m-auto pt-3 pb-1">รหัสผ่าน</p>
+              <p class="font-th text-black text-1xl w-4/5 m-auto pt-3 pb-1">รหัสผ่าน
+              <span v-if="this.errors === 'fields required' || this.errors === 'password required'" class="text-red-500 font-bold text-lg">!</span></p>
               <input 
                 class="flex items-center w-4/5 h-10 m-auto rounded-md px-3" 
+                v-bind:class="{'border-2 border-red-500': this.errors === 'fields required' || this.errors === 'password required'}"
                 type="password"
                 v-model="form.password"
                 placeholder="กรอกชื่อรหัสผ่าน"
@@ -47,14 +51,29 @@ export default {
             form: {
                 username: "",
                 password: ""
-            }
+            },
+            errors: '',
         }
   },
   components: { Header },
   methods: {
-        async login() {
-            if (this.form.username == null || this.form.password == null || this.form.username == "" || this.form.password == "") {
-              this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+        async login(e) {
+            e.preventDefault()
+            this.errors = ''
+            if (this.form.username == "" || this.form.password == "") {
+              if(this.form.username == "" && this.form.password == ""){
+                this.errors = 'fields required'
+                this.$swal("กรุณากรอกข้อมูลให้ครบ", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+              }
+              else if(this.form.username == ""){
+                this.errors = 'email required'
+                this.$swal("กรุณากรอกอีเมลล์", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+              }
+              else if(this.form.password == ""){
+                this.errors = 'password required'
+                this.$swal("กรุณากรอกรหัสผ่าน", "ตรวจสอบให้แน่ใจว่าใส่ข้อมูลครบทุกช่อง", "error")
+              }
+              
             }
             else {
               let res = await AuthUser.dispatch('login', this.form)
@@ -63,7 +82,8 @@ export default {
                 this.$router.push('/home')
               }
               else {
-                this.$swal("ชื่อผู้ใช้หรือรหัสผ่านผิด", "โปรดตรวจสอบชื่อผู้ใช้ หรือรหัสผ่านอีกครั้ง", "error")
+                this.errors = 'email or password invalid.'
+                this.$swal("ไม่พบชื่อผู้ใช้หรือรหัสผ่าน", "โปรดตรวจสอบชื่อผู้ใช้ หรือรหัสผ่านอีกครั้ง", "error")
                 this.clearForm()
               }
             }
