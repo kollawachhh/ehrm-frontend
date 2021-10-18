@@ -61,6 +61,11 @@ const routes = [
     component: UserDetail,
   },
   {
+    path: '/detail',
+    name: 'Detail',
+    component: UserDetail,
+  },
+  {
     path: '/request',
     name: 'RequestList',
     component: RequestList,
