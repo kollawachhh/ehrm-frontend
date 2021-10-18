@@ -29,18 +29,18 @@
                         :default-value="new Date()" :disabled-date="notBeforeToday" @change="change"
                          placeholder='วันที่ลางาน' 
                         :clearable=false 
-                        class="center bg-white w-11/12 mb-2 p-1 font-th"></date-picker>
+                        class="center bg-white w-11/12 mb-2 font-th"></date-picker>
                         <span class="flex font-th pb-2">ถึง</span>
                         <date-picker v-if="this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
                         :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
                         value-type="format" placeholder='วันที่ลางาน' 
                         :clearable=false disabled
-                        class="center font-th bg-white w-11/12 mb-2 p-1"></date-picker>
+                        class="center font-th bg-white w-11/12 mb-2"></date-picker>
                         <date-picker v-if="!this.disableDatePicker" @change="getTotalDate" v-model="form.endDate" type="date" 
                         :default-value="new Date()" :disabled-date="notBeforeTodaySelect" 
                         value-type="format" placeholder='วันที่ลางาน' 
                         :clearable=false
-                        class="center font-th bg-white w-11/12 mb-2 p-1"></date-picker>
+                        class="center font-th bg-white w-11/12 mb-2"></date-picker>
                         <br>
                         <span class="font-th">เป็นเวลา {{form.totalDate}} วัน</span>
                     </div>
