@@ -172,28 +172,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .mx-datepicker {
-        width: 160px;
-    }
-    .mx-input-wrapper {
-        width: 150px;
-        margin-right: 0px;
-    }
-    .mx-input {
-        background-color: rgb(15, 76, 129), var(--tw-bg-opacity);
-        color: white;
-        font-size: 20px;
-        display: inline-block;
-        width: 100%;
-        height: 30px;
-        padding: 1px 1px 1px 10px;
-        line-height: 1.4;
-        border: 0;
         font-family: 'Kanit';
+        width: 150px;
+        margin-right: 10px;
     }
-    .mx-icon-calendar {
-        right: 20px;
-        color: white;
-    }
+
 </style>

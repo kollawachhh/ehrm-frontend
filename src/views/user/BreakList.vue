@@ -195,4 +195,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+    .mx-datepicker {
+            font-family: 'Kanit';
+            width: 150px;
+            margin-right: 10px;
+        }
+
+</style>
