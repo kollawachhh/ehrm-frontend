@@ -7,14 +7,16 @@
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
                     <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span><br>
                     <date-picker @change="getDateSelect" v-if="this.role === 'admin' && this.selectedUser == null && this.daySelect == ''" 
-                        v-model="this.date.day" type="date"
+                        v-model="date.day" type="date"
                         :default-value="this.date.day"  
                         :value="this.daySelect"
                         value-type="format" format="YYYY-MM-DD"
                         :clearable=false
-                        calendar-class=""></date-picker>
+                        calendar-class=""
+                        >
+                    </date-picker>
                     <date-picker v-if="this.role === 'admin' && this.selectedUser == null && this.daySelect != ''" 
-                        v-model="this.date.day" type="date" 
+                        v-model="date.day" type="date" 
                         :default-value="new Date()" :disabled-date="notAfterTodaySelect" 
                         :value="this.daySelect"
                         value-type="format" format="YYYY-MM-DD"
@@ -123,7 +125,7 @@ export default {
             }
         },
         getDateSelect() {
-            console.log("this.date.day")
+            console.log("data",this.date)
         },
         async notAfterTodaySelect(date) {
             return date > new Date(new Date());
