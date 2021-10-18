@@ -5,7 +5,7 @@
             <div class="mx-auto mt-6 w-10/12">
                 <div class="flex bg-primary py-5 rounded-t-md">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
-                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span><br>
+                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-2">รายงานการลา</span><br>
                     <date-picker @change="getDateSelect" v-if="this.role === 'admin' && this.selectedUser == null" 
                         v-model="date.day" type="date"
                         :default-value="this.date.day"  
