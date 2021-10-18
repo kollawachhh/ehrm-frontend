@@ -5,7 +5,21 @@
             <div class="mx-auto mt-6 w-10/12">
                 <div class="flex bg-primary py-5 rounded-t-md">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
-                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span>
+                    <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-5">รายงานการลา ({{this.date.day}})</span><br>
+                    <date-picker @change="getDateSelect" v-if="this.role === 'admin' && this.selectedUser == null && this.daySelect == ''" 
+                        v-model="this.date.day" type="date"
+                        :default-value="this.date.day"  
+                        :value="this.daySelect"
+                        value-type="format" format="YYYY-MM-DD"
+                        :clearable=false
+                        calendar-class=""></date-picker>
+                    <date-picker v-if="this.role === 'admin' && this.selectedUser == null && this.daySelect != ''" 
+                        v-model="this.date.day" type="date" 
+                        :default-value="new Date()" :disabled-date="notAfterTodaySelect" 
+                        :value="this.daySelect"
+                        value-type="format" format="YYYY-MM-DD"
+                        :clearable=false
+                        class=""></date-picker>
                     <span v-if="this.role !== 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
                     <select v-if="this.role !== 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
                         <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
@@ -71,6 +85,7 @@ export default {
     data() {
         return {
             selectedUser: this.$route.params.id,
+            daySelect: "",
             date: {
                 month: "",
                 year: "",
@@ -107,14 +122,22 @@ export default {
                 return AuthUser.getters.isAuthen
             }
         },
+        getDateSelect() {
+            console.log("this.date.day")
+        },
+        async notAfterTodaySelect(date) {
+            return date > new Date(new Date());
+        },
         async fetchLeaves() {
-            const current = new Date();
-            const today = current.toLocaleDateString('en-CA');
+            if (this.daySelect != '') {
+                this.date.day = moment(this.daySelect)
+            }
+            console.log(this.date.day)
             if (this.role === "admin") {
                 //for debug
                 // await LeaveStore.dispatch('fetchLeavesByDate', "2021-10-19")
                 if (this.selectedUser == null) {
-                    await LeaveStore.dispatch('fetchLeavesByDate', today)
+                    await LeaveStore.dispatch('fetchLeavesByDate', this.date.day)
                 } else {
                     await LeaveStore.dispatch('fetchLeavesById', this.selectedUser)
                 }
@@ -122,6 +145,7 @@ export default {
                 await LeaveStore.dispatch('fetchLeaves')
             }
             this.leaveList = LeaveStore.getters.leaves
+            console.log(this.leaveList);
             this.leaveList.forEach(function(leave) {
             if (leave.type == "sick_leave") {
                 leave.type = "ลาป่วย";
