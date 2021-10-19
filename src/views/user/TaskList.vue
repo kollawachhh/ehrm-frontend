@@ -162,12 +162,12 @@ export default {
     },
     computed: {
         resultQuery(){
-            if(this.date.month && this.role != "admin"){
+            if(this.date.month && (this.role != "admin" || this.selectedUser != null)){
                 return this.logList.filter((item)=>{
                     return this.date.month.toLowerCase().split(' ').every(v => (moment(item.date).format('MMMM')).toLowerCase().includes(v))
                 })
-                }else{
-                    return this.logList;
+            } else {
+                return this.logList;
             }
         },
     }
