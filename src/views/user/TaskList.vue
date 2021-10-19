@@ -162,7 +162,7 @@ export default {
     },
     computed: {
         resultQuery(){
-            if(this.date.month){
+            if(this.date.month && this.role != "admin"){
                 return this.logList.filter((item)=>{
                     return this.date.month.toLowerCase().split(' ').every(v => (moment(item.date).format('MMMM')).toLowerCase().includes(v))
                 })
