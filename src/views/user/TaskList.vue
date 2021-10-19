@@ -72,7 +72,7 @@ export default {
             role: AuthUser.getters.user.role,
             months:[
                 { id: '1', name: 'January' },
-                { id: '2', name: 'Febuary' },
+                { id: '2', name: 'February' },
                 { id: '3', name: 'March' },
                 { id: '4', name: 'April' },
                 { id: '5', name: 'May' },
@@ -132,7 +132,7 @@ export default {
             switch(month){
                 case 'January':
                     return 'มกราคม'
-                case 'Febuary':
+                case 'February':
                     return 'กุมภาพันธ์'
                 case 'March':
                     return 'มีนาคม'
