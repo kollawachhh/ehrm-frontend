@@ -164,7 +164,7 @@ export default {
         resultQuery(){
             if(this.date.month){
                 return this.logList.filter((item)=>{
-                    return this.date.month.toLowerCase().split(' ').every(v => (moment(item.created_at).format('MMMM')).toLowerCase().includes(v))
+                    return this.date.month.toLowerCase().split(' ').every(v => (moment(item.date).format('MMMM')).toLowerCase().includes(v))
                 })
                 }else{
                     return this.logList;
