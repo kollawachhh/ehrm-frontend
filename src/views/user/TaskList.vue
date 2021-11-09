@@ -6,10 +6,10 @@
                 <div class="flex bg-primary py-5 rounded-t-md ">
                     <button @click="backPage" class="font-th ml-5 text-xl px-2 text-white">&#60;</button>
                     <span v-if="this.role === 'admin' && this.selectedUser == null" class="flex font-th text-white text-xl mx-auto">รายการลงงาน</span>
-                    <span v-if="this.role != 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span>
-                    <select v-if="this.role != 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white">
-                        <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
-                    </select>
+                    <!-- <span v-if="this.role != 'admin' || this.selectedUser != null" class="flex font-th text-white text-xl mx-auto">{{ getMonthTH(this.date.month)  }} - {{ this.date.year }}</span> -->
+                    <!-- <select v-if="this.role != 'admin' || this.selectedUser != null" v-model="date.month" name="months" id="months" class="flex mr-5 w-5 bg-primary text-white"> -->
+                        <!-- <option v-for="(month, index) in months" :key="index" :value='month.name' class="bg-white text-primary">{{ getMonthTH(month.name) }}</option>
+                    </select> -->
                     <date-picker v-if="this.role === 'admin' && this.selectedUser == null" 
                         v-model="date.day" value-type="format" format="YYYY-MM-DD" @change="change" :clearable="false"
                     />  
@@ -60,38 +60,38 @@ export default {
         Header,
         Footer,
     },
-    data() {
-        return {
-            selectedUser: this.$route.params.id,
-            date: {
-                month: "",
-                year: "",
-                day: ""
-            },
-            logList: [],
-            role: AuthUser.getters.user.role,
-            months:[
-                { id: '1', name: 'January' },
-                { id: '2', name: 'February' },
-                { id: '3', name: 'March' },
-                { id: '4', name: 'April' },
-                { id: '5', name: 'May' },
-                { id: '6', name: 'June' },
-                { id: '7', name: 'July' },
-                { id: '8', name: 'August' },
-                { id: '9', name: 'September' },
-                { id: '10', name: 'October' },
-                { id: '11', name: 'November' },
-                { id: '12', name: 'December' },
-            ],
-        }
-    },
-    mounted(){
-        if (!this.isAuthen()) {
-            this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
-            this.$router.push("/")
-        }
-    },
+    // data() {
+    //     return {
+    //         // selectedUser: this.$route.params.id,
+    //         date: {
+    //             month: "",
+    //             year: "",
+    //             day: ""
+    //         },
+    //         logList: [],
+    //         role: AuthUser.getters.user.role,
+    //         months:[
+    //             { id: '1', name: 'January' },
+    //             { id: '2', name: 'February' },
+    //             { id: '3', name: 'March' },
+    //             { id: '4', name: 'April' },
+    //             { id: '5', name: 'May' },
+    //             { id: '6', name: 'June' },
+    //             { id: '7', name: 'July' },
+    //             { id: '8', name: 'August' },
+    //             { id: '9', name: 'September' },
+    //             { id: '10', name: 'October' },
+    //             { id: '11', name: 'November' },
+    //             { id: '12', name: 'December' },
+    //         ],
+    //     }
+    // },
+    // mounted(){
+    //     if (!this.isAuthen()) {
+    //         this.$swal("คุณไม่มีสิทธิ์เข้าถึง", "กรุณาเข้าสู่ระบบ", "warning")
+    //         this.$router.push("/")
+    //     }
+    // },
     async created() {
         let today = new Date();
         this.date.month = today.toLocaleString('default', { month: 'long' })
@@ -160,17 +160,17 @@ export default {
             this.fetchLogsByDate()
         },
     },
-    computed: {
-        resultQuery(){
-            if(this.date.month && (this.role != "admin" || this.selectedUser != null)){
-                return this.logList.filter((item)=>{
-                    return this.date.month.toLowerCase().split(' ').every(v => (moment(item.date).format('MMMM')).toLowerCase().includes(v))
-                })
-            } else {
-                return this.logList;
-            }
-        },
-    }
+    // computed: {
+    //     resultQuery(){
+    //         if(this.date.month && (this.role != "admin" || this.selectedUser != null)){
+    //             return this.logList.filter((item)=>{
+    //                 return this.date.month.toLowerCase().split(' ').every(v => (moment(item.date).format('MMMM')).toLowerCase().includes(v))
+    //             })
+    //         } else {
+    //             return this.logList;
+    //         }
+    //     },
+    // }
 }
 </script>
 
